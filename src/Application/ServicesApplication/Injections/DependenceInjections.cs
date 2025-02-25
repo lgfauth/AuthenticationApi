@@ -5,13 +5,14 @@ using MongoDB.Driver;
 using Repository.Interfaces;
 using Repository.Services;
 using ServicesApplication.Interfaces;
+using ServicesApplication.Messanger;
 using ServicesApplication.Services;
 
 namespace ServicesApplication.Injections
 {
     public class DependenceInjections
     {
-        public static void Injections(IServiceCollection services)
+        public static void Injections(IServiceCollection services, RabbitMqConfiguration rabbitMq)
         {
 
             services.AddSingleton<IMongoClient>(sp =>
@@ -24,6 +25,10 @@ namespace ServicesApplication.Injections
             services.AddScoped<IRegisterRepository, RegisterRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IAuthService, AuthService>();
+
+            services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
+
+            //services.AddSingleton<IRabbitMqPublisher>(sp => new RabbitMqPublisher(rabbitMq.HostName, rabbitMq.UserName, rabbitMq.Password, rabbitMq.QueueName));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace AuthenticationApi.Controllers
             _registerService = registerService;
         }
 
-        [HttpPost("register")]
+        [HttpPost("subscription")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             try
@@ -25,7 +25,7 @@ namespace AuthenticationApi.Controllers
                 if (response is null)
                     return StatusCode(500, "An internal error has occurred. Please try again later.");
                 else if (response.IsSuccess)
-                    return StatusCode(201, new { Message = "new user successful created." });
+                    return StatusCode(201, new { Message = "All done here, see your email to confirm your subscription." });
 
                 return BadRequest(response!.Error);
             }
@@ -35,7 +35,7 @@ namespace AuthenticationApi.Controllers
             }
         }
 
-        [HttpPost("unregister")]
+        [HttpPost("unsubscription")]
         public async Task<IActionResult> Unregister([FromBody] UnregisterRequest request)
         {
             try
@@ -45,7 +45,7 @@ namespace AuthenticationApi.Controllers
                 if (response is null)
                     return StatusCode(500, "An internal error has occurred. Please try again later.");
                 else if(response.IsSuccess)
-                    return Ok(new { Message = "User successful deleted." });
+                    return Ok(new { Message = "All done here, see your email to confirm your unsubscription." });
                 
                 return BadRequest(response!.Error);
             }

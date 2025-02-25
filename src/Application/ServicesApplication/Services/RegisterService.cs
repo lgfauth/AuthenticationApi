@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Models;
+﻿using Domain.Models;
 using Domain.Models.Envelope;
 using Domain.Settings;
 using Microsoft.Extensions.Options;
@@ -12,11 +11,11 @@ namespace ServicesApplication.Services
     public class RegisterService : IRegisterService
     {
         private readonly IRegisterRepository _registerRepository;
-        private readonly JwtSettings _jwtSettings;
+        private readonly IRabbitMqPublisher _publisher;
 
-        public RegisterService(IRegisterRepository registerRepository, IOptions<JwtSettings> jwtSettings)
+        public RegisterService(IRegisterRepository registerRepository,IRabbitMqPublisher publisher)
         {
-            _jwtSettings = jwtSettings.Value;
+            _publisher = publisher;
             _registerRepository = registerRepository;
         }
 
@@ -27,18 +26,9 @@ namespace ServicesApplication.Services
             if (existingUser is not null)
                 throw new Exception("User already exists.");
 
-            var passwordHash = Encryptor.HashPassword(request.Password);
+            request.Password = Encryptor.HashPassword(request.Password);
 
-            var newUser = new User
-            {
-                Username = request.Username,
-                PasswordHash = passwordHash,
-                LastName = request.LastName,
-                Email = request.Email,
-                Name = request.Name
-            };
-
-            await _registerRepository.CreateUserAsync(newUser);
+            await _publisher.PublishUserRegistration(request);
 
             return new ResponseOk<bool>(true);
         }

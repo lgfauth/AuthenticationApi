@@ -1,4 +1,5 @@
 using Domain.Settings;
+using Microsoft.Extensions.Configuration;
 using ServicesApplication.Injections;
 
 namespace AuthenticationApi
@@ -14,8 +15,11 @@ namespace AuthenticationApi
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
             builder.Services.Configure<MongoDbData>(builder.Configuration.GetSection("MongoDbData"));
             builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
+            builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMqConfiguration"));
 
-            DependenceInjections.Injections(builder.Services);
+            RabbitMqConfiguration rabbitHost = builder.Configuration.GetSection("RabbitMqConfiguration").Get<RabbitMqConfiguration>()!;
+
+            DependenceInjections.Injections(builder.Services, rabbitHost);
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
