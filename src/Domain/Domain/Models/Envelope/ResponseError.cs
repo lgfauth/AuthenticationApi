@@ -6,14 +6,14 @@
 
         public T Data { get; } = default!;
 
-        public ErrorModel Error { get; } = default!;
+        public ResponseModel Error { get; } = default!;
 
         public ResponseError(T data)
         {
             Data = data;
         }
 
-        public ResponseError(ErrorModel error)
+        public ResponseError(ResponseModel error)
         {
             Error = error;
         }

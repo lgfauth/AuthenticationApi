@@ -26,7 +26,7 @@ namespace ServicesApplication.Messanger
             _queueName = configuration.Value.QueueName;
         }
 
-        public async Task PublishUserRegistration(RegisterRequest message)
+        public async Task PublishUserRegistration(SubscriptionRequest message)
         {
             using var connection = await _factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();

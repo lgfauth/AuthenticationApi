@@ -28,10 +28,7 @@ namespace ServicesApplication.Services
 
             var user = await _authRepository.GetUserByUsernameAndPasswordAsync(request.Username, encryptedPassword);
 
-            if (user is null)
-                throw new Exception("Invalid username or password.");
-
-            if (!encryptedPassword.Equals(user.PasswordHash))
+            if (user is null || !encryptedPassword.Equals(user.PasswordHash))
                 throw new Exception("Invalid username or password.");
 
             var response = Encryptor.GenerateToken(user, _jwtSettings);

@@ -8,6 +8,6 @@ namespace Domain.Models.Envelope
         T Data { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        ErrorModel Error { get; }
+        ResponseModel Error { get; }
     }
 }

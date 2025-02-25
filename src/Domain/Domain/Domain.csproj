@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>E:\_Projetos\AuthenticationApi\src\Application\ServicesApplication\bin\Debug\net8.0\Domain.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

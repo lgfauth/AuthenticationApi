@@ -6,7 +6,7 @@
 
         public T Data { get; } = default!;
 
-        public ErrorModel? Error { get; }
+        public ResponseModel? Error { get; }
 
         public ResponseOk(T data)
         {

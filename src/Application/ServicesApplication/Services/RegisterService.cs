@@ -19,7 +19,7 @@ namespace ServicesApplication.Services
             _registerRepository = registerRepository;
         }
 
-        public async Task<IResponse<bool>> RegisterAsync(RegisterRequest request)
+        public async Task<IResponse<bool>> RegisterAsync(SubscriptionRequest request)
         {
             var existingUser = await _registerRepository.GetUserByUsernameAndEmailAsync(request.Username, request.Email);
 
@@ -33,7 +33,7 @@ namespace ServicesApplication.Services
             return new ResponseOk<bool>(true);
         }
 
-        public async Task<IResponse<bool>> UnregisterAsync(UnregisterRequest request)
+        public async Task<IResponse<bool>> UnregisterAsync(UnsubscribeRequest request)
         {
             var existingUser = await _registerRepository.GetUserByUsernameAndEmailAsync(request.Username, request.Email);
 

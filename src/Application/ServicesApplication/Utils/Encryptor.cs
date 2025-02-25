@@ -24,13 +24,11 @@ namespace ServicesApplication.Utils
             var key = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            // Claims que podem identificar o usuário e suas permissões
             var claims = new[]
             {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim("username", user.Username),
             new Claim("email", user.Email),
-            // Você pode adicionar roles ou outras claims conforme a necessidade
         };
 
             var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);

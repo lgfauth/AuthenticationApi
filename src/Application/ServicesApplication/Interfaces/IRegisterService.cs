@@ -5,7 +5,7 @@ namespace ServicesApplication.Interfaces
 {
     public interface IRegisterService
     {
-        Task<IResponse<bool>> RegisterAsync(RegisterRequest request);
-        Task<IResponse<bool>> UnregisterAsync(UnregisterRequest request);
+        Task<IResponse<bool>> RegisterAsync(SubscriptionRequest request);
+        Task<IResponse<bool>> UnregisterAsync(UnsubscribeRequest request);
     }
 }

@@ -4,6 +4,6 @@ namespace ServicesApplication.Interfaces
 {
     public interface IRabbitMqPublisher
     {
-        Task PublishUserRegistration(RegisterRequest message);
+        Task PublishUserRegistration(SubscriptionRequest message);
     }
 }

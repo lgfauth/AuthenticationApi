@@ -1,11 +1,19 @@
 using Domain.Settings;
-using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;
 using ServicesApplication.Injections;
+using System.Reflection;
 
 namespace AuthenticationApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +30,19 @@ namespace AuthenticationApi
             DependenceInjections.Injections(builder.Services, rabbitHost);
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.EnableAnnotations();
+
+                var domainXmlPath = Path.Combine(AppContext.BaseDirectory, "Domain.xml");
+                var presentationXmlPath = Path.Combine(AppContext.BaseDirectory,
+                    $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+
+                options.IncludeXmlComments(domainXmlPath);
+                options.IncludeXmlComments(presentationXmlPath);
+
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Ruler RPG API", Version = "v1" });
+            });
 
             var app = builder.Build();
 
