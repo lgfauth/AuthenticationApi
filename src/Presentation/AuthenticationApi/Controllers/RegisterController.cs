@@ -40,26 +40,13 @@ namespace AuthenticationApi.Controllers
 
                 var response = await _registerService.RegisterAsync(request);
 
-                if (response is null)
+                return StatusCode(201, new ResponseModel
                 {
-                    return StatusCode(500, new ResponseModel
-                    {
-                        Message = "An internal error has occurred. Please try again later.",
-                        Code = "IE501"
-                    });
-                }
-                else if (response.IsSuccess)
-                {
-                    return StatusCode(201, new ResponseModel
-                    {
-                        Message = "All done here, see your email to confirm your subscription.",
-                        Code = "SC201"
-                    });
-                }
-
-                return BadRequest(response!.Error);
+                    Message = "All done here, see your email to confirm your subscription.",
+                    Code = "SC201"
+                });
             }
-            catch(ValidationException vex)
+            catch (ValidationException vex)
             {
                 return BadRequest(vex.Error);
             }
@@ -74,8 +61,8 @@ namespace AuthenticationApi.Controllers
         /// </summary>
         /// <param name="request">Object UnsubscribeRequest for unsubscription.</param>
         /// <returns></returns>
-        [HttpPost("unsubscribe")]
-        [ProducesResponseType(typeof(ResponseModel), 201)]
+        [HttpDelete("unsubscribe")]
+        [ProducesResponseType(typeof(ResponseModel), 200)]
         [ProducesResponseType(typeof(ResponseModel), 400)]
         [ProducesResponseType(typeof(ResponseModel), 500)]
         public async Task<IActionResult> Unregister([FromBody] UnsubscribeRequest request)
@@ -86,12 +73,14 @@ namespace AuthenticationApi.Controllers
 
                 var response = await _registerService.UnregisterAsync(request);
 
-                if (response is null)
-                    return StatusCode(500, "An internal error has occurred. Please try again later.");
-                else if (response.IsSuccess)
-                    return Ok(new { Message = "All done here, see your email to confirm your unsubscription." });
+                if (!response.IsSuccess)
+                    return BadRequest(response!.Error);
 
-                return BadRequest(response!.Error);
+                return Ok(new ResponseModel
+                {
+                    Message = "All done here, see your email to confirm your unsubscription.",
+                    Code = "UR695"
+                });
             }
             catch (ValidationException vex)
             {
@@ -99,7 +88,7 @@ namespace AuthenticationApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ResponseModel { Message = ex.Message, Code = "EX058" });
+                return BadRequest(new ResponseModel { Message = ex.Message, Code = "EX059" });
             }
         }
     }

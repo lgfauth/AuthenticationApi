@@ -3,13 +3,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Repository.Interfaces;
-using Repository.Services;
+using Repository.Repositories;
 using ServicesApplication.Interfaces;
 using ServicesApplication.Messanger;
 using ServicesApplication.Services;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ServicesApplication.Injections
 {
+    [ExcludeFromCodeCoverage]
     public class DependenceInjections
     {
         public static void Injections(IServiceCollection services, RabbitMqConfiguration rabbitMq)
@@ -27,8 +29,6 @@ namespace ServicesApplication.Injections
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
-
-            //services.AddSingleton<IRabbitMqPublisher>(sp => new RabbitMqPublisher(rabbitMq.HostName, rabbitMq.UserName, rabbitMq.Password, rabbitMq.QueueName));
         }
     }
 }

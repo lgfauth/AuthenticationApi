@@ -3,9 +3,11 @@ using Domain.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Repository.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Repository.Services
+namespace Repository.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class AuthRepository : IAuthRepository
     {
         private readonly IMongoCollection<User> _users;

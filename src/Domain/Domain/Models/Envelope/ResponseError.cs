@@ -1,5 +1,8 @@
-﻿namespace Domain.Models.Envelope
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Domain.Models.Envelope
 {
+    [ExcludeFromCodeCoverage]
     public class ResponseError<T> : IResponse<T>
     {
         public bool IsSuccess { get; } = false;

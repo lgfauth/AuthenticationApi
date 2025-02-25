@@ -1,13 +1,16 @@
-﻿using Domain.Models;
+﻿using Domain.Entities;
+using Domain.Models;
 using Domain.Settings;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using ServicesApplication.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 
 namespace ServicesApplication.Messanger
 {
+    [ExcludeFromCodeCoverage]
     public class RabbitMqPublisher : IRabbitMqPublisher
     {
         private readonly ConnectionFactory _factory;
@@ -26,7 +29,7 @@ namespace ServicesApplication.Messanger
             _queueName = configuration.Value.QueueName;
         }
 
-        public async Task PublishUserRegistration(SubscriptionRequest message)
+        public async Task PublishUserRegistrationOnQueueAsync(UserQueueRegister message)
         {
             using var connection = await _factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();

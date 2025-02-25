@@ -1,14 +1,12 @@
 ﻿using Domain.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ServicesApplication.Validators
 {
+    [ExcludeFromCodeCoverage]
     public class ValidationException : Exception
     {
         public ResponseModel Error { get; set; }
-        public ValidationException(string message, string code) : base(message)
-        {
-            Error = new ResponseModel { Code = code, Message = message };
-        }
 
         public ValidationException(ResponseModel error) : base(error.Message)
         {

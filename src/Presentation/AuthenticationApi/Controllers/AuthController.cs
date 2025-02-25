@@ -66,7 +66,7 @@ namespace AuthenticationApi.Controllers
             if (response is null || !response.IsSuccess)
                 return Ok(new { isValid = false });
             
-            return Ok(new { isValid = response.Data });
+            return Ok(new ResponseModel { Message = response.Data ? "Valid" : "Not valid", Code = "LA652" });
         }
     }
 }

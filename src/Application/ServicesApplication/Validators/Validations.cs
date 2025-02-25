@@ -1,8 +1,10 @@
 ﻿using Domain.Models;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace ServicesApplication.Validators
 {
+    [ExcludeFromCodeCoverage]
     public class Validations
     {
         /// <summary>

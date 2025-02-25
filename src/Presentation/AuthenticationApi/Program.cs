@@ -1,6 +1,7 @@
 using Domain.Settings;
 using Microsoft.OpenApi.Models;
 using ServicesApplication.Injections;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace AuthenticationApi
@@ -8,6 +9,7 @@ namespace AuthenticationApi
     /// <summary>
     /// 
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Program
     {
         /// <summary>

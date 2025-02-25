@@ -1,9 +1,10 @@
-﻿using Domain.Models;
+﻿using Domain.Entities;
+using Domain.Models;
 
 namespace ServicesApplication.Interfaces
 {
     public interface IRabbitMqPublisher
     {
-        Task PublishUserRegistration(SubscriptionRequest message);
+        Task PublishUserRegistrationOnQueueAsync(UserQueueRegister message);
     }
 }

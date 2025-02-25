@@ -3,9 +3,11 @@ using Domain.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Repository.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Repository.Services
+namespace Repository.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class RegisterRepository : IRegisterRepository
     {
         private readonly IMongoCollection<User> _users;
@@ -24,7 +26,6 @@ namespace Repository.Services
             _users = database.GetCollection<User>("Users");
 
         }
-        public async Task CreateUserAsync(User user) => await _users.InsertOneAsync(user);
 
         public async Task<User?> GetUserByUsernameAndEmailAsync(string username, string email)
         {
@@ -35,14 +36,6 @@ namespace Repository.Services
             var response = await _users.FindAsync(filter);
 
             return response.FirstOrDefault();
-        }
-
-        public async Task<bool> DeleteUserByIdAsync(string id)
-        {
-            var filter = Builders<User>.Filter.Eq(u => u.Id, id);
-            var result = await _users.DeleteOneAsync(filter);
-
-            return result.DeletedCount > 0;
         }
     }
 }

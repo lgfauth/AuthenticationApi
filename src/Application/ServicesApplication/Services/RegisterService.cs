@@ -1,7 +1,6 @@
-﻿using Domain.Models;
+﻿using Domain.Entities;
+using Domain.Models;
 using Domain.Models.Envelope;
-using Domain.Settings;
-using Microsoft.Extensions.Options;
 using Repository.Interfaces;
 using ServicesApplication.Interfaces;
 using ServicesApplication.Utils;
@@ -13,7 +12,7 @@ namespace ServicesApplication.Services
         private readonly IRegisterRepository _registerRepository;
         private readonly IRabbitMqPublisher _publisher;
 
-        public RegisterService(IRegisterRepository registerRepository,IRabbitMqPublisher publisher)
+        public RegisterService(IRegisterRepository registerRepository, IRabbitMqPublisher publisher)
         {
             _publisher = publisher;
             _registerRepository = registerRepository;
@@ -28,7 +27,8 @@ namespace ServicesApplication.Services
 
             request.Password = Encryptor.HashPassword(request.Password);
 
-            await _publisher.PublishUserRegistration(request);
+            UserQueueRegister userQueueRegister = new UserQueueRegister(request);
+            await _publisher.PublishUserRegistrationOnQueueAsync(userQueueRegister);
 
             return new ResponseOk<bool>(true);
         }
@@ -40,9 +40,10 @@ namespace ServicesApplication.Services
             if (existingUser is null)
                 throw new Exception("User not exists.");
 
-            var response = await _registerRepository.DeleteUserByIdAsync(existingUser.Id);
+            UserQueueRegister userQueueRegister = new UserQueueRegister(request);
+            await _publisher.PublishUserRegistrationOnQueueAsync(userQueueRegister);
 
-            return new ResponseOk<bool>(response);
+            return new ResponseOk<bool>(true);
         }
     }
 }
