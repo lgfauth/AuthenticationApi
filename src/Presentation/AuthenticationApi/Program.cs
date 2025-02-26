@@ -20,16 +20,17 @@ namespace AuthenticationApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.WebHost.UseUrls("http://0.0.0.0:8080");
+
             builder.Services.AddControllers();
-            Console.WriteLine("--------------- // (\"---------------");
             builder.Services.Configure<EnvirolmentVariables>(builder.Configuration);
-            Console.WriteLine("Realizada configuração de variaveis de ambiente");
 
             EnvirolmentVariables variables = builder.Configuration.Get<EnvirolmentVariables>()!;
+            Console.WriteLine("--------------- // ---------------");
             Console.WriteLine("verificando valores de variaveis de ambiente: " + variables.MongoDbSettings__ConnectionString);
+            Console.WriteLine("--------------- // ---------------");
 
             DependenceInjections.Injections(builder.Services, variables.MongoDbSettings__ConnectionString);
-            Console.WriteLine("Finalizadas injeções de dependência, iniciando configurações do swagger");
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
@@ -46,22 +47,13 @@ namespace AuthenticationApi
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Ruler RPG API", Version = "v1" });
             });
 
-            Console.WriteLine("Finalizada configuração do swagger, preparando build");
-
             var app = builder.Build();
 
-            //if (app.Environment.IsDevelopment())
-            //{
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            //}
-
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
-
-            Console.WriteLine("Finalizado build, inicializando aplicação");
-            Console.WriteLine("--------------- // (\"---------------");
 
             app.Run();
         }
