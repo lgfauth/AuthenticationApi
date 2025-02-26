@@ -12,17 +12,17 @@ namespace Repository.Repositories
     {
         private readonly IMongoCollection<User> _users;
 
-        public AuthRepository(IOptions<MongoDbSettings> mongoDbSettings, IOptions<MongoDbData> mongoDbData)
+        public AuthRepository(IOptions<EnvirolmentVariables> envirolmentVariables)
         {
             string connectionString = string.Format(
-                mongoDbSettings.Value.ConnectionString,
-                mongoDbData.Value.user,
-                mongoDbData.Value.passsword,
-                mongoDbData.Value.cluster);
+                envirolmentVariables.Value.MongoDbSettings__ConnectionString,
+                envirolmentVariables.Value.MongoDbData__user,
+                envirolmentVariables.Value.MongoDbData__passsword,
+                envirolmentVariables.Value.MongoDbData__cluster);
 
             var client = new MongoClient(connectionString);
 
-            var database = client.GetDatabase(mongoDbSettings.Value.DatabaseName);
+            var database = client.GetDatabase(envirolmentVariables.Value.MongoDbSettings__DatabaseName);
             _users = database.GetCollection<User>("Users");
         }
         public async Task<User?> GetUserByUsernameAsync(string username)

@@ -19,9 +19,9 @@ namespace ServicesApplication.Utils
             return Convert.ToBase64String(hashedBytes);
         }
 
-        public static AuthResponse GenerateToken(User user, JwtSettings jwtSettings)
+        public static AuthResponse GenerateToken(User user, EnvirolmentVariables envorolmentVariables)
         {
-            var key = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
+            var key = Encoding.UTF8.GetBytes(envorolmentVariables.JwtSettings__SecretKey);
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var claims = new[]
@@ -36,9 +36,9 @@ namespace ServicesApplication.Utils
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(jwtSettings.ExpirationMinutes),
-                Issuer = jwtSettings.Issuer,
-                Audience = jwtSettings.Audience,
+                Expires = DateTime.UtcNow.AddMinutes(envorolmentVariables.JwtSettings__ExpirationMinutes),
+                Issuer = envorolmentVariables.JwtSettings__Issuer,
+                Audience = envorolmentVariables.JwtSettings__Audience,
                 SigningCredentials = credentials
             };
 

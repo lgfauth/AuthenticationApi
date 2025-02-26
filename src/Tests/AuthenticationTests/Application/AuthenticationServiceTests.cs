@@ -19,13 +19,13 @@ namespace AuthenticationTests.Application
     public class AuthServiceTests
     {
         private readonly Mock<IAuthRepository> _authRepositoryMock;
-        private readonly JwtSettings _jwtSettings;
+        private readonly EnvirolmentVariables _jwtSettings;
         private readonly AuthService _authService;
 
         public AuthServiceTests()
         {
             _authRepositoryMock = new Mock<IAuthRepository>();
-            _jwtSettings = new JwtSettings
+            _jwtSettings = new EnvirolmentVariables
             {
                 SecretKey = "abcdefghijklmnopqrstuvwxyz012345",
                 Issuer = "TestIssuer",

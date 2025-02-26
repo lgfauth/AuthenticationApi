@@ -22,14 +22,11 @@ namespace AuthenticationApi
 
             builder.Services.AddControllers();
 
-            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-            builder.Services.Configure<MongoDbData>(builder.Configuration.GetSection("MongoDbData"));
-            builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
-            builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMqConfiguration"));
+            builder.Services.Configure<EnvirolmentVariables>(builder.Configuration);
 
-            RabbitMqConfiguration rabbitHost = builder.Configuration.GetSection("RabbitMqConfiguration").Get<RabbitMqConfiguration>()!;
+            EnvirolmentVariables variables = builder.Configuration.Get<EnvirolmentVariables>()!;
 
-            DependenceInjections.Injections(builder.Services, rabbitHost);
+            DependenceInjections.Injections(builder.Services, variables.MongoDbSettings__ConnectionString);
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>

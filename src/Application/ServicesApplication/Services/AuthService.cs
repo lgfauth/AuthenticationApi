@@ -14,12 +14,12 @@ namespace ServicesApplication.Services
     public class AuthService : IAuthService
     {
         private readonly IAuthRepository _authRepository;
-        private readonly JwtSettings _jwtSettings;
+        private readonly EnvirolmentVariables _envorolmentVariables;
 
-        public AuthService(IAuthRepository authRepository, IOptions<JwtSettings> jwtSettings)
+        public AuthService(IAuthRepository authRepository, IOptions<EnvirolmentVariables> envorolmentVariables)
         {
             _authRepository = authRepository;
-            _jwtSettings = jwtSettings.Value;
+            _envorolmentVariables = envorolmentVariables.Value;
         }
 
         public async Task<IResponse<AuthResponse>> LoginAsync(LoginRequest request)
@@ -31,7 +31,7 @@ namespace ServicesApplication.Services
             if (user is null || !encryptedPassword.Equals(user.PasswordHash))
                 throw new Exception("Invalid username or password.");
 
-            var response = Encryptor.GenerateToken(user, _jwtSettings);
+            var response = Encryptor.GenerateToken(user, _envorolmentVariables);
 
             return new ResponseOk<AuthResponse>(response);
         }
@@ -39,7 +39,7 @@ namespace ServicesApplication.Services
         public IResponse<bool> ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
+            var key = Encoding.UTF8.GetBytes(_envorolmentVariables.JwtSettings__SecretKey);
 
             try
             {
@@ -48,9 +48,9 @@ namespace ServicesApplication.Services
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
-                    ValidIssuer = _jwtSettings.Issuer,
+                    ValidIssuer = _envorolmentVariables.JwtSettings__Issuer,
                     ValidateAudience = true,
-                    ValidAudience = _jwtSettings.Audience,
+                    ValidAudience = _envorolmentVariables.JwtSettings__Audience,
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 

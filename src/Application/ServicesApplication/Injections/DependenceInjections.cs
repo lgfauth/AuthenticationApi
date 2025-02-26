@@ -1,6 +1,4 @@
-﻿using Domain.Settings;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Repository.Interfaces;
 using Repository.Repositories;
@@ -14,14 +12,10 @@ namespace ServicesApplication.Injections
     [ExcludeFromCodeCoverage]
     public class DependenceInjections
     {
-        public static void Injections(IServiceCollection services, RabbitMqConfiguration rabbitMq)
+        public static void Injections(IServiceCollection services, string mongoDbConnectionString)
         {
 
-            services.AddSingleton<IMongoClient>(sp =>
-            {
-                var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-                return new MongoClient(settings.ConnectionString);
-            });
+            services.AddSingleton<IMongoClient>(sp => new MongoClient(mongoDbConnectionString));
 
             services.AddScoped<IRegisterService, RegisterService>();
             services.AddScoped<IRegisterRepository, RegisterRepository>();

@@ -16,17 +16,17 @@ namespace ServicesApplication.Messanger
         private readonly ConnectionFactory _factory;
         private readonly string _queueName;
 
-        public RabbitMqPublisher(IOptions<RabbitMqConfiguration> configuration)
+        public RabbitMqPublisher(IOptions<EnvirolmentVariables> envorolmentVariables)
         {
             _factory = new ConnectionFactory()
             {
-                HostName = configuration.Value.HostName,
-                UserName = configuration.Value.UserName,
-                Password = configuration.Value.Password,
-                VirtualHost = configuration.Value.VirtualHost
+                HostName = envorolmentVariables.Value.RabbitMqConfiguration__HostName,
+                UserName = envorolmentVariables.Value.RabbitMqConfiguration__UserName,
+                Password = envorolmentVariables.Value.RabbitMqConfiguration__Password,
+                VirtualHost = envorolmentVariables.Value.RabbitMqConfiguration__VirtualHost
             };
 
-            _queueName = configuration.Value.QueueName;
+            _queueName = envorolmentVariables.Value.RabbitMqConfiguration__QueueName;
         }
 
         public async Task PublishUserRegistrationOnQueueAsync(UserQueueRegister message)
