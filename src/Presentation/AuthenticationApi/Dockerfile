@@ -1,20 +1,23 @@
-# Etapa 1: Construção da aplicação
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
 WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
 
-# Copie o restante dos arquivos e faça o publish
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["src/Presentation/AuthenticationApi/AuthenticationApi.csproj", "src/Presentation/AuthenticationApi/"]
+RUN dotnet restore "./src/Presentation/AuthenticationApi/AuthenticationApi.csproj"
 COPY . .
-WORKDIR "/AuthenticationAPI/AuthenticationAPI"
-RUN dotnet publish "./AuthenticationAPI.csproj" -c Release -o /app/publish
+WORKDIR "/src/src/Presentation/AuthenticationApi"
+RUN dotnet build "./AuthenticationApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./AuthenticationAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./AuthenticationApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Etapa 2: Construção da imagem final de runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM base AS final
 WORKDIR /app
-COPY --from=build /app/publish .
-EXPOSE 8080
-EXPOSE 8081
-ENTRYPOINT ["dotnet", "AuthenticationAPI.dll"]
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "AuthenticationApi.dll"]

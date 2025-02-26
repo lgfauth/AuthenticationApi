@@ -4,19 +4,23 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>5432846c-1cf9-423f-8b46-3146117094c4</UserSecretsId>
+    <UserSecretsId>96237407-eea2-4628-a227-6bf4f2df5b0e</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>E:\_Projetos\AuthenticationApi\src\Application\ServicesApplication\bin\Debug\net8.0\AuthenticationAPI.xml</DocumentationFile>
+    <DocumentationFile>E:\_Projetos\AuthenticationApi\src\Presentation\AuthenticationApi\bin\Debug\net8.0\AuthenticationApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="3.2.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.3.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\ServicesApplication\ServicesApplication.csproj" />
+    <ProjectReference Include="..\..\Domain\Domain\Domain.csproj" />
   </ItemGroup>
 
 </Project>
