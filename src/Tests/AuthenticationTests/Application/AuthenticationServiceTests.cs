@@ -29,7 +29,7 @@ namespace AuthenticationTests.Application
                 JWTSETTINGS_EXPIRATIONMINUTES = 60
             };
             var options = Options.Create(_variables);
-            _authService = new AuthService(_authRepositoryMock.Object, options);
+            _authService = new AuthService(_authRepositoryMock.Object, options.Value);
         }
 
         [Fact]
