@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS experimental
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS build
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
