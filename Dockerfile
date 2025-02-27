@@ -17,6 +17,23 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./AuthenticationApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
+RUN --mount=type=secret,id=AUTHENTICATION_SECRETS \
+    sh -c 'echo "{\"RABBITMQCONFIGURATION__VIRTUALHOST\":\"value\",\
+    \"RABBITMQCONFIGURATION__USERNAME\":\"value\",\
+    \"RABBITMQCONFIGURATION__QUEUENAME\":\"value\",\
+    \"RABBITMQCONFIGURATION__PASSWORD\":\"value\",\
+    \"RABBITMQCONFIGURATION__HOSTNAME\":\"value\",\
+    \"MONGODBSETTINGS__DATABASENAME\":\"value\",\
+    \"MONGODBSETTINGS__CONNECTIONSTRING\":\"value\",\
+    \"MONGODBDATA__USER\":\"value\",\
+    \"MONGODBDATA__PASSWORD\":\"value\",\
+    \"MONGODBDATA__CLUSTER\":\"value\",\
+    \"Kestrel:Certificates:Development:Password\":\"value\",\
+    \"JWTSETTINGS__SECRETKEY\":\"value\",\
+    \"JWTSETTINGS__ISSUER\":\"value\",\
+    \"JWTSETTINGS__EXPIRATIONMINUTES\":\"value\",\
+    \"JWTSETTINGS__AUDIENCE\":\"value\"}' > /run/secrets/AUTHENTICATION_SECRETS
+
 FROM build AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
