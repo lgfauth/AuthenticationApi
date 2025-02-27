@@ -27,7 +27,8 @@ namespace AuthenticationApi
 
             EnvirolmentVariables variables = builder.Configuration.Get<EnvirolmentVariables>()!;
             Console.WriteLine("--------------- // ---------------");
-            Console.WriteLine("verificando valores de variaveis de ambiente: " + variables.MongoDbSettings__ConnectionString);
+            Console.WriteLine("verificando valores de variaveis de ambiente ConnectionString: " + variables.MongoDbSettings__ConnectionString);
+            Console.WriteLine("verificando valores de variaveis de ambiente QueueName: " + variables.RabbitMqConfiguration__QueueName);
             Console.WriteLine("--------------- // ---------------");
 
             DependenceInjections.Injections(builder.Services, variables.MongoDbSettings__ConnectionString);

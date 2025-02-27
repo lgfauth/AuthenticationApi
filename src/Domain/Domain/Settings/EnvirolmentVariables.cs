@@ -13,7 +13,7 @@ namespace Domain.Settings
         public string MongoDbData__passsword { get; set; } = string.Empty;
         public string MongoDbData__cluster { get; set; } = string.Empty;
         public string MongoDbSettings__ConnectionString { get; set; } = string.Empty;
-        public string MongoDbSettings__DatabaseName { get; set; } = string.Empty;
+        public string MongoDbSettings__DatabaseName { get; set; } = "mongodb+srv://{0}:{1}@{2}.mongodb.net/";
         public string RabbitMqConfiguration__HostName { get; set; } = string.Empty;
         public string RabbitMqConfiguration__UserName { get; set; } = string.Empty;
         public string RabbitMqConfiguration__Password { get; set; } = string.Empty;
