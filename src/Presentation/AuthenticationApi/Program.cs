@@ -26,10 +26,18 @@ namespace AuthenticationApi
             
             builder.Configuration.AddEnvironmentVariables();
 
-            builder.Services.Configure<EnvirolmentVariables>(builder.Configuration);
-            EnvirolmentVariables variables = builder.Configuration.Get<EnvirolmentVariables>()!;
-            
+            //builder.Services.Configure<EnvirolmentVariables>(builder.Configuration);
+            //EnvirolmentVariables variables = builder.Configuration.Get<EnvirolmentVariables>()!;
+
+            var variables = new EnvirolmentVariables();
+            builder.Configuration.Bind(variables);
+
+            // Registra a classe se necessário
+            builder.Services.AddSingleton(variables);
+
             Console.WriteLine("--------------- // ---------------");
+            Console.WriteLine("MongoDbSettings__ConnectionString: " + builder.Configuration["MongoDbSettings__ConnectionString"]);
+            Console.WriteLine("RabbitMqConfiguration__QueueName: " + builder.Configuration["RabbitMqConfiguration__QueueName"]);
             Console.WriteLine("verificando valores de variaveis de ambiente ConnectionString: " + variables.MongoDbSettings__ConnectionString);
             Console.WriteLine("verificando valores de variaveis de ambiente QueueName: " + variables.RabbitMqConfiguration__QueueName);
             Console.WriteLine("--------------- // ---------------");
