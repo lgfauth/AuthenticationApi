@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for authenticationapi on 2025-02-26T21:54:43Z
+# fly.toml app configuration file generated for authapi on 2025-02-27T19:03:25Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'authenticationapi'
-primary_region = 'gru'
+app = 'authapi'
+primary_region = 'iad'
 
 [build]
 
