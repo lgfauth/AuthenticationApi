@@ -1,7 +1,6 @@
 ﻿using Domain.Models;
 using Domain.Models.Envelope;
 using Domain.Settings;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Repository.Interfaces;
 using ServicesApplication.Interfaces;
@@ -16,10 +15,10 @@ namespace ServicesApplication.Services
         private readonly IAuthRepository _authRepository;
         private readonly EnvirolmentVariables _envorolmentVariables;
 
-        public AuthService(IAuthRepository authRepository, IOptions<EnvirolmentVariables> envorolmentVariables)
+        public AuthService(IAuthRepository authRepository, EnvirolmentVariables envorolmentVariables)
         {
             _authRepository = authRepository;
-            _envorolmentVariables = envorolmentVariables.Value;
+            _envorolmentVariables = envorolmentVariables;
         }
 
         public async Task<IResponse<AuthResponse>> LoginAsync(LoginRequest request)

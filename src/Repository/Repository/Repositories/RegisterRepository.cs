@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using Domain.Settings;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Repository.Interfaces;
 using System.Diagnostics.CodeAnalysis;
@@ -12,17 +11,17 @@ namespace Repository.Repositories
     {
         private readonly IMongoCollection<User> _users;
 
-        public RegisterRepository(IOptions<EnvirolmentVariables> envirolmentVariables)
+        public RegisterRepository(EnvirolmentVariables envirolmentVariables)
         {
             string connectionString = string.Format(
-                envirolmentVariables.Value.MONGODBSETTINGS__CONNECTIONSTRING,
-                envirolmentVariables.Value.MONGODBDATA__USER,
-                envirolmentVariables.Value.MONGODBDATA__PASSWORD,
-                envirolmentVariables.Value.MONGODBDATA__CLUSTER);
+                envirolmentVariables.MONGODBSETTINGS__CONNECTIONSTRING,
+                envirolmentVariables.MONGODBDATA__USER,
+                envirolmentVariables.MONGODBDATA__PASSWORD,
+                envirolmentVariables.MONGODBDATA__CLUSTER);
 
             var client = new MongoClient(connectionString);
 
-            var database = client.GetDatabase(envirolmentVariables.Value.MONGODBSETTINGS__DATABASENAME);
+            var database = client.GetDatabase(envirolmentVariables.MONGODBSETTINGS__DATABASENAME);
             _users = database.GetCollection<User>("Users");
 
         }

@@ -20,24 +20,13 @@ namespace AuthenticationApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.WebHost.UseUrls("http://0.0.0.0:8080");
-
-            builder.Services.AddControllers();
-            
+            builder.Services.AddControllers();            
             builder.Configuration.AddEnvironmentVariables();
-
-            //builder.Services.Configure<EnvirolmentVariables>(builder.Configuration);
-            //EnvirolmentVariables variables = builder.Configuration.Get<EnvirolmentVariables>()!;
-
 
             var variables = new EnvirolmentVariables();
             builder.Configuration.Bind(variables);
-
-            // Registra a classe se necessário
             builder.Services.AddSingleton(variables);
 
-            Console.WriteLine("--------------- // ---------------");
-            Console.WriteLine(builder.Configuration);
             Console.WriteLine("--------------- // ---------------");
             Console.WriteLine("MONGODBSETTINGS__CONNECTIONSTRING: " + builder.Configuration["MONGODBSETTINGS__CONNECTIONSTRING"]);
             Console.WriteLine("RABBITMQCONFIGURATION__QUEUENAME: " + builder.Configuration["RABBITMQCONFIGURATION__QUEUENAME"]);
