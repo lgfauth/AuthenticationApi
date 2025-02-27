@@ -28,13 +28,13 @@ namespace AuthenticationApi
             builder.Services.AddSingleton(variables);
 
             Console.WriteLine("--------------- // ---------------");
-            Console.WriteLine("MONGODBSETTINGS__CONNECTIONSTRING: " + builder.Configuration["MONGODBSETTINGS__CONNECTIONSTRING"]);
-            Console.WriteLine("RABBITMQCONFIGURATION__QUEUENAME: " + builder.Configuration["RABBITMQCONFIGURATION__QUEUENAME"]);
-            Console.WriteLine("verificando valores de variaveis de ambiente ConnectionString: " + variables.MONGODBSETTINGS__CONNECTIONSTRING);
-            Console.WriteLine("verificando valores de variaveis de ambiente QueueName: " + variables.RABBITMQCONFIGURATION__QUEUENAME);
+            Console.WriteLine("MONGODBSETTINGS__CONNECTIONSTRING: " + builder.Configuration["MONGODBSETTINGS_CONNECTIONSTRING"]);
+            Console.WriteLine("RABBITMQCONFIGURATION__QUEUENAME: " + builder.Configuration["RABBITMQCONFIGURATION_QUEUENAME"]);
+            Console.WriteLine("verificando valores de variaveis de ambiente ConnectionString: " + variables.MONGODBSETTINGS_CONNECTIONSTRING);
+            Console.WriteLine("verificando valores de variaveis de ambiente QueueName: " + variables.RABBITMQCONFIGURATION_QUEUENAME);
             Console.WriteLine("--------------- // ---------------");
 
-            DependenceInjections.Injections(builder.Services, variables.MONGODBSETTINGS__CONNECTIONSTRING);
+            DependenceInjections.Injections(builder.Services, variables.MONGODBSETTINGS_CONNECTIONSTRING);
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>

@@ -18,13 +18,13 @@ namespace ServicesApplication.Messanger
         {
             _factory = new ConnectionFactory()
             {
-                HostName = envorolmentVariables.RABBITMQCONFIGURATION__HOSTNAME,
-                UserName = envorolmentVariables.RABBITMQCONFIGURATION__USERNAME,
-                Password = envorolmentVariables.RABBITMQCONFIGURATION__PASSWORD,
-                VirtualHost = envorolmentVariables.RABBITMQCONFIGURATION__VIRTUALHOST
+                HostName = envorolmentVariables.RABBITMQCONFIGURATION_HOSTNAME,
+                UserName = envorolmentVariables.RABBITMQCONFIGURATION_USERNAME,
+                Password = envorolmentVariables.RABBITMQCONFIGURATION_PASSWORD,
+                VirtualHost = envorolmentVariables.RABBITMQCONFIGURATION_VIRTUALHOST
             };
 
-            _queueName = envorolmentVariables.RABBITMQCONFIGURATION__QUEUENAME;
+            _queueName = envorolmentVariables.RABBITMQCONFIGURATION_QUEUENAME;
         }
 
         public async Task PublishUserRegistrationOnQueueAsync(UserQueueRegister message)

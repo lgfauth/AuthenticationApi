@@ -21,7 +21,7 @@ namespace ServicesApplication.Utils
 
         public static AuthResponse GenerateToken(User user, EnvirolmentVariables envorolmentVariables)
         {
-            var key = Encoding.UTF8.GetBytes(envorolmentVariables.JWTSETTINGS__SECRETKEY);
+            var key = Encoding.UTF8.GetBytes(envorolmentVariables.JWTSETTINGS_SECRETKEY);
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var claims = new[]
@@ -36,9 +36,9 @@ namespace ServicesApplication.Utils
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(envorolmentVariables.JWTSETTINGS__EXPIRATIONMINUTES),
-                Issuer = envorolmentVariables.JWTSETTINGS__ISSUER,
-                Audience = envorolmentVariables.JWTSETTINGS__AUDIENCE,
+                Expires = DateTime.UtcNow.AddMinutes(envorolmentVariables.JWTSETTINGS_EXPIRATIONMINUTES),
+                Issuer = envorolmentVariables.JWTSETTINGS_ISSUER,
+                Audience = envorolmentVariables.JWTSETTINGS_AUDIENCE,
                 SigningCredentials = credentials
             };
 

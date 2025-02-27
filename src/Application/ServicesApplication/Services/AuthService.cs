@@ -38,7 +38,7 @@ namespace ServicesApplication.Services
         public IResponse<bool> ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_envorolmentVariables.JWTSETTINGS__SECRETKEY);
+            var key = Encoding.UTF8.GetBytes(_envorolmentVariables.JWTSETTINGS_SECRETKEY);
 
             try
             {
@@ -47,9 +47,9 @@ namespace ServicesApplication.Services
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
-                    ValidIssuer = _envorolmentVariables.JWTSETTINGS__ISSUER,
+                    ValidIssuer = _envorolmentVariables.JWTSETTINGS_ISSUER,
                     ValidateAudience = true,
-                    ValidAudience = _envorolmentVariables.JWTSETTINGS__AUDIENCE,
+                    ValidAudience = _envorolmentVariables.JWTSETTINGS_AUDIENCE,
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 

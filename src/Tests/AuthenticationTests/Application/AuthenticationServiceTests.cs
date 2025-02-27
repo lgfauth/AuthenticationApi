@@ -23,10 +23,10 @@ namespace AuthenticationTests.Application
             _authRepositoryMock = new Mock<IAuthRepository>();
             _variables = new EnvirolmentVariables
             {
-                JWTSETTINGS__SECRETKEY = "abcdefghijklmnopqrstuvwxyz012345",
-                JWTSETTINGS__ISSUER = "TestIssuer",
-                JWTSETTINGS__AUDIENCE = "TestAudience",
-                JWTSETTINGS__EXPIRATIONMINUTES = 60
+                JWTSETTINGS_SECRETKEY = "abcdefghijklmnopqrstuvwxyz012345",
+                JWTSETTINGS_ISSUER = "TestIssuer",
+                JWTSETTINGS_AUDIENCE = "TestAudience",
+                JWTSETTINGS_EXPIRATIONMINUTES = 60
             };
             var options = Options.Create(_variables);
             _authService = new AuthService(_authRepositoryMock.Object, options);
@@ -67,16 +67,16 @@ namespace AuthenticationTests.Application
             Assert.False(string.IsNullOrEmpty(response.Data.Token));
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_variables.JWTSETTINGS__SECRETKEY);
+            var key = Encoding.UTF8.GetBytes(_variables.JWTSETTINGS_SECRETKEY);
 
             tokenHandler.ValidateToken(response.Data.Token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = true,
-                ValidIssuer = _variables.JWTSETTINGS__ISSUER,
+                ValidIssuer = _variables.JWTSETTINGS_ISSUER,
                 ValidateAudience = true,
-                ValidAudience = _variables.JWTSETTINGS__AUDIENCE,
+                ValidAudience = _variables.JWTSETTINGS_AUDIENCE,
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
         }
@@ -105,16 +105,16 @@ namespace AuthenticationTests.Application
         {
             // Arrange
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_variables.JWTSETTINGS__SECRETKEY);
+            var key = Encoding.UTF8.GetBytes(_variables.JWTSETTINGS_SECRETKEY);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new[] {
                     new System.Security.Claims.Claim(JwtRegisteredClaimNames.Sub, "1"),
                     new System.Security.Claims.Claim("username", "testuser")
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(_variables.JWTSETTINGS__EXPIRATIONMINUTES),
-                Issuer = _variables.JWTSETTINGS__ISSUER,
-                Audience = _variables.JWTSETTINGS__AUDIENCE,
+                Expires = DateTime.UtcNow.AddMinutes(_variables.JWTSETTINGS_EXPIRATIONMINUTES),
+                Issuer = _variables.JWTSETTINGS_ISSUER,
+                Audience = _variables.JWTSETTINGS_AUDIENCE,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
