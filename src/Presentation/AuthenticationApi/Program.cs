@@ -29,6 +29,7 @@ namespace AuthenticationApi
             //builder.Services.Configure<EnvirolmentVariables>(builder.Configuration);
             //EnvirolmentVariables variables = builder.Configuration.Get<EnvirolmentVariables>()!;
 
+
             var variables = new EnvirolmentVariables();
             builder.Configuration.Bind(variables);
 
@@ -36,8 +37,10 @@ namespace AuthenticationApi
             builder.Services.AddSingleton(variables);
 
             Console.WriteLine("--------------- // ---------------");
-            Console.WriteLine("MongoDbSettings__ConnectionString: " + builder.Configuration["MongoDbSettings__ConnectionString"]);
-            Console.WriteLine("RabbitMqConfiguration__QueueName: " + builder.Configuration["RabbitMqConfiguration__QueueName"]);
+            Console.WriteLine(builder.Configuration);
+            Console.WriteLine("--------------- // ---------------");
+            Console.WriteLine("MONGODBSETTINGS__CONNECTIONSTRING: " + builder.Configuration["MONGODBSETTINGS__CONNECTIONSTRING"]);
+            Console.WriteLine("RABBITMQCONFIGURATION__QUEUENAME: " + builder.Configuration["RABBITMQCONFIGURATION__QUEUENAME"]);
             Console.WriteLine("verificando valores de variaveis de ambiente ConnectionString: " + variables.MONGODBSETTINGS__CONNECTIONSTRING);
             Console.WriteLine("verificando valores de variaveis de ambiente QueueName: " + variables.RABBITMQCONFIGURATION__QUEUENAME);
             Console.WriteLine("--------------- // ---------------");

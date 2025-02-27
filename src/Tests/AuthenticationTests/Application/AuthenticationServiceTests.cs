@@ -7,32 +7,28 @@ using Moq;
 using Repository.Interfaces;
 using ServicesApplication.Services;
 using ServicesApplication.Utils;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AuthenticationTests.Application
 {
     public class AuthServiceTests
     {
         private readonly Mock<IAuthRepository> _authRepositoryMock;
-        private readonly EnvirolmentVariables _jwtSettings;
+        private readonly EnvirolmentVariables _variables;
         private readonly AuthService _authService;
 
         public AuthServiceTests()
         {
             _authRepositoryMock = new Mock<IAuthRepository>();
-            _jwtSettings = new EnvirolmentVariables
+            _variables = new EnvirolmentVariables
             {
-                SecretKey = "abcdefghijklmnopqrstuvwxyz012345",
-                Issuer = "TestIssuer",
-                Audience = "TestAudience",
-                ExpirationMinutes = 60
+                JWTSETTINGS__SECRETKEY = "abcdefghijklmnopqrstuvwxyz012345",
+                JWTSETTINGS__ISSUER = "TestIssuer",
+                JWTSETTINGS__AUDIENCE = "TestAudience",
+                JWTSETTINGS__EXPIRATIONMINUTES = 60
             };
-            var options = Options.Create(_jwtSettings);
+            var options = Options.Create(_variables);
             _authService = new AuthService(_authRepositoryMock.Object, options);
         }
 
@@ -71,16 +67,16 @@ namespace AuthenticationTests.Application
             Assert.False(string.IsNullOrEmpty(response.Data.Token));
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
+            var key = Encoding.UTF8.GetBytes(_variables.JWTSETTINGS__SECRETKEY);
 
             tokenHandler.ValidateToken(response.Data.Token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = true,
-                ValidIssuer = _jwtSettings.Issuer,
+                ValidIssuer = _variables.JWTSETTINGS__ISSUER,
                 ValidateAudience = true,
-                ValidAudience = _jwtSettings.Audience,
+                ValidAudience = _variables.JWTSETTINGS__AUDIENCE,
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
         }
@@ -109,16 +105,16 @@ namespace AuthenticationTests.Application
         {
             // Arrange
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
+            var key = Encoding.UTF8.GetBytes(_variables.JWTSETTINGS__SECRETKEY);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new[] {
                     new System.Security.Claims.Claim(JwtRegisteredClaimNames.Sub, "1"),
                     new System.Security.Claims.Claim("username", "testuser")
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes),
-                Issuer = _jwtSettings.Issuer,
-                Audience = _jwtSettings.Audience,
+                Expires = DateTime.UtcNow.AddMinutes(_variables.JWTSETTINGS__EXPIRATIONMINUTES),
+                Issuer = _variables.JWTSETTINGS__ISSUER,
+                Audience = _variables.JWTSETTINGS__AUDIENCE,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
