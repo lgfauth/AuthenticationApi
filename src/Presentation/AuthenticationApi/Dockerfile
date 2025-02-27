@@ -18,7 +18,7 @@ COPY ["src/Domain/Domain/Domain.csproj", "src/Domain/Domain/"]
 COPY ["src/Repository/Repository/Repository.csproj", "src/Repository/Repository/"]
 RUN dotnet restore "./src/Presentation/AuthenticationApi/AuthenticationApi.csproj"
 COPY . .
-WORKDIR "/src/src/Presentation/AuthenticationApi"
+WORKDIR "/src/Presentation/AuthenticationApi"
 RUN dotnet build "./AuthenticationApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
