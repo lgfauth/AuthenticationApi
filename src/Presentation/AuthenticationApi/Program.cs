@@ -38,11 +38,11 @@ namespace AuthenticationApi
             Console.WriteLine("--------------- // ---------------");
             Console.WriteLine("MongoDbSettings__ConnectionString: " + builder.Configuration["MongoDbSettings__ConnectionString"]);
             Console.WriteLine("RabbitMqConfiguration__QueueName: " + builder.Configuration["RabbitMqConfiguration__QueueName"]);
-            Console.WriteLine("verificando valores de variaveis de ambiente ConnectionString: " + variables.MongoDbSettings__ConnectionString);
-            Console.WriteLine("verificando valores de variaveis de ambiente QueueName: " + variables.RabbitMqConfiguration__QueueName);
+            Console.WriteLine("verificando valores de variaveis de ambiente ConnectionString: " + variables.MONGODBSETTINGS__CONNECTIONSTRING);
+            Console.WriteLine("verificando valores de variaveis de ambiente QueueName: " + variables.RABBITMQCONFIGURATION__QUEUENAME);
             Console.WriteLine("--------------- // ---------------");
 
-            DependenceInjections.Injections(builder.Services, variables.MongoDbSettings__ConnectionString);
+            DependenceInjections.Injections(builder.Services, variables.MONGODBSETTINGS__CONNECTIONSTRING);
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>

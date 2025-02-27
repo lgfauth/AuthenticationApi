@@ -15,14 +15,14 @@ namespace Repository.Repositories
         public RegisterRepository(IOptions<EnvirolmentVariables> envirolmentVariables)
         {
             string connectionString = string.Format(
-                envirolmentVariables.Value.MongoDbSettings__ConnectionString,
-                envirolmentVariables.Value.MongoDbData__user,
-                envirolmentVariables.Value.MongoDbData__passsword,
-                envirolmentVariables.Value.MongoDbData__cluster);
+                envirolmentVariables.Value.MONGODBSETTINGS__CONNECTIONSTRING,
+                envirolmentVariables.Value.MONGODBDATA__USER,
+                envirolmentVariables.Value.MONGODBDATA__PASSWORD,
+                envirolmentVariables.Value.MONGODBDATA__CLUSTER);
 
             var client = new MongoClient(connectionString);
 
-            var database = client.GetDatabase(envirolmentVariables.Value.MongoDbSettings__DatabaseName);
+            var database = client.GetDatabase(envirolmentVariables.Value.MONGODBSETTINGS__DATABASENAME);
             _users = database.GetCollection<User>("Users");
 
         }

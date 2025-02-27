@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Models;
 using Domain.Settings;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -20,13 +19,13 @@ namespace ServicesApplication.Messanger
         {
             _factory = new ConnectionFactory()
             {
-                HostName = envorolmentVariables.Value.RabbitMqConfiguration__HostName,
-                UserName = envorolmentVariables.Value.RabbitMqConfiguration__UserName,
-                Password = envorolmentVariables.Value.RabbitMqConfiguration__Password,
-                VirtualHost = envorolmentVariables.Value.RabbitMqConfiguration__VirtualHost
+                HostName = envorolmentVariables.Value.RABBITMQCONFIGURATION__HOSTNAME,
+                UserName = envorolmentVariables.Value.RABBITMQCONFIGURATION__USERNAME,
+                Password = envorolmentVariables.Value.RABBITMQCONFIGURATION__PASSWORD,
+                VirtualHost = envorolmentVariables.Value.RABBITMQCONFIGURATION__VIRTUALHOST
             };
 
-            _queueName = envorolmentVariables.Value.RabbitMqConfiguration__QueueName;
+            _queueName = envorolmentVariables.Value.RABBITMQCONFIGURATION__QUEUENAME;
         }
 
         public async Task PublishUserRegistrationOnQueueAsync(UserQueueRegister message)

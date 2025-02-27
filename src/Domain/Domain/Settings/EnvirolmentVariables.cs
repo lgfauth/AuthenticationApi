@@ -5,19 +5,19 @@ namespace Domain.Settings
     [ExcludeFromCodeCoverage]
     public class EnvirolmentVariables
     {
-        public string JwtSettings__SecretKey { get; set; } = string.Empty;
-        public string JwtSettings__Issuer { get; set; } = string.Empty;
-        public string JwtSettings__Audience { get; set; } = string.Empty;
-        public int JwtSettings__ExpirationMinutes { get; set; } = 60;
-        public string MongoDbData__user { get; set; } = string.Empty;
-        public string MongoDbData__passsword { get; set; } = string.Empty;
-        public string MongoDbData__cluster { get; set; } = string.Empty;
-        public string MongoDbSettings__ConnectionString { get; set; } = string.Empty;
-        public string MongoDbSettings__DatabaseName { get; set; } = "mongodb+srv://{0}:{1}@{2}.mongodb.net/";
-        public string RabbitMqConfiguration__HostName { get; set; } = string.Empty;
-        public string RabbitMqConfiguration__UserName { get; set; } = string.Empty;
-        public string RabbitMqConfiguration__Password { get; set; } = string.Empty;
-        public string RabbitMqConfiguration__QueueName { get; set; } = string.Empty;
-        public string RabbitMqConfiguration__VirtualHost { get; set; } = string.Empty;
+        public string JWTSETTINGS__SECRETKEY { get; set; } = string.Empty;
+        public string JWTSETTINGS__ISSUER { get; set; } = string.Empty;
+        public string JWTSETTINGS__AUDIENCE { get; set; } = string.Empty;
+        public int JWTSETTINGS__EXPIRATIONMINUTES { get; set; } = 60;
+        public string MONGODBDATA__USER { get; set; } = string.Empty;
+        public string MONGODBDATA__PASSWORD { get; set; } = string.Empty;
+        public string MONGODBDATA__CLUSTER { get; set; } = string.Empty;
+        public string MONGODBSETTINGS__CONNECTIONSTRING { get; set; } = string.Empty;
+        public string MONGODBSETTINGS__DATABASENAME { get; set; } = "mongodb+srv://{0}:{1}@{2}.mongodb.net/";
+        public string RABBITMQCONFIGURATION__HOSTNAME { get; set; } = string.Empty;
+        public string RABBITMQCONFIGURATION__USERNAME { get; set; } = string.Empty;
+        public string RABBITMQCONFIGURATION__PASSWORD { get; set; } = string.Empty;
+        public string RABBITMQCONFIGURATION__QUEUENAME { get; set; } = string.Empty;
+        public string RABBITMQCONFIGURATION__VIRTUALHOST { get; set; } = string.Empty;
     }
 }
