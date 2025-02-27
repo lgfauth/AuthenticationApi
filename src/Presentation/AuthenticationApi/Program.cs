@@ -23,9 +23,12 @@ namespace AuthenticationApi
             builder.WebHost.UseUrls("http://0.0.0.0:8080");
 
             builder.Services.AddControllers();
-            builder.Services.Configure<EnvirolmentVariables>(builder.Configuration);
+            
+            builder.Configuration.AddEnvironmentVariables();
 
+            builder.Services.Configure<EnvirolmentVariables>(builder.Configuration);
             EnvirolmentVariables variables = builder.Configuration.Get<EnvirolmentVariables>()!;
+            
             Console.WriteLine("--------------- // ---------------");
             Console.WriteLine("verificando valores de variaveis de ambiente ConnectionString: " + variables.MongoDbSettings__ConnectionString);
             Console.WriteLine("verificando valores de variaveis de ambiente QueueName: " + variables.RabbitMqConfiguration__QueueName);
