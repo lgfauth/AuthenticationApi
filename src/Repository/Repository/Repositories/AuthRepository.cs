@@ -7,29 +7,9 @@ using System.Diagnostics.CodeAnalysis;
 namespace Repository.Repositories
 {
     [ExcludeFromCodeCoverage]
-    public class AuthRepository : IAuthRepository
+    public class AuthRepository : RepositoryBase, IAuthRepository
     {
-        private readonly IMongoCollection<User> _users;
-
-        public AuthRepository(EnvirolmentVariables envirolmentVariables)
-        {
-            string connectionString = string.Format(
-                envirolmentVariables.MONGODBSETTINGS_CONNECTIONSTRING,
-                envirolmentVariables.MONGODBDATA_USER,
-                envirolmentVariables.MONGODBDATA_PASSWORD,
-                envirolmentVariables.MONGODBDATA_CLUSTER);
-
-            var client = new MongoClient(connectionString);
-
-            var database = client.GetDatabase(envirolmentVariables.MONGODBSETTINGS_DATABASENAME);
-            _users = database.GetCollection<User>("Users");
-        }
-        public async Task<User?> GetUserByUsernameAsync(string username)
-        {
-            var response = await _users.FindAsync(Builders<User>.Filter.Eq(u => u.Username, username));
-
-            return response.FirstOrDefault();
-        }
+        public AuthRepository(EnvirolmentVariables envirolmentVariables) : base(envirolmentVariables) { }
 
         public async Task<User?> GetUserByUsernameAndPasswordAsync(string username, string password)
         {

@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>E:\_Projetos\AuthenticationApi\src\Application\ServicesApplication\bin\Debug\net8.0\Domain.xml</DocumentationFile>
+    <DocumentationFile>E:\_Projetos\AuthenticationApi\src\Presentation\AuthApi\bin\Debug\net6.0\Domain.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

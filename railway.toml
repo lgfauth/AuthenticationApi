@@ -1,4 +1,4 @@
 [build]
 type = "docker"
-dockerfile = "src/Presentation/AuthenticationApi/Dockerfile"
-context = "src/Presentation/AuthenticationApi"
+dockerfile = "src/Presentation/AuthApi/Dockerfile"
+context = "src/Presentation/AuthApi"
