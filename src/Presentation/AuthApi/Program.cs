@@ -18,8 +18,25 @@ namespace AuthApi
 
             DependenceInjections.Injections(builder.Services, variables.MONGODBSETTINGS_CONNECTIONSTRING);
 
-            var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-            builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+            var isDevelopment = builder.Environment.IsDevelopment();
+
+            if (isDevelopment)
+            {
+                builder.Services.AddCors(options =>
+                {
+                    options.AddPolicy("DevelopmentCorsPolicy", policy =>
+                    {
+                        policy.AllowAnyOrigin()   // Permite qualquer origem
+                              .AllowAnyMethod()   // Permite qualquer método (GET, POST, etc.)
+                              .AllowAnyHeader();  // Permite qualquer cabeçalho
+                    });
+                });
+            }
+            else
+            {
+                var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+                builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+            }
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
@@ -35,18 +52,6 @@ namespace AuthApi
 
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Ruler RPG API", Version = "v1" });
             });
-
-#if DEBUG
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("DevelopmentCorsPolicy", policy =>
-                {
-                    policy.AllowAnyOrigin()   // Permite qualquer origem
-                          .AllowAnyMethod()   // Permite qualquer método (GET, POST, etc.)
-                          .AllowAnyHeader();  // Permite qualquer cabeçalho
-                });
-            });
-#endif
 
             var app = builder.Build();
 
