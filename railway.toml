@@ -1,2 +1,4 @@
 [build]
+# type = "docker"
+# dockerfile = "./Dockerfile"
 context = "src/Presentation/AuthApi"
