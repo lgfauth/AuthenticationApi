@@ -1,6 +1,9 @@
 ﻿using Application.Interfaces;
+using Application.LogModels;
 using Application.Messanger;
 using Application.Services;
+using MicroservicesLogger;
+using MicroservicesLogger.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Repository.Interfaces;
@@ -16,6 +19,8 @@ namespace Application.Injections
         {
 
             services.AddSingleton<IMongoClient>(sp => new MongoClient(mongoDbConnectionString));
+
+            services.AddScoped<IApiLog<ApiLogModel>, ApiLog<ApiLogModel>>();
 
             services.AddScoped<IRegisterService, RegisterService>();
             services.AddScoped<IRegisterRepository, RegisterRepository>();

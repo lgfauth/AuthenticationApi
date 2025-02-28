@@ -6,6 +6,6 @@ namespace Application.Interfaces
     public interface IAuthService
     {
         Task<IResponse<AuthResponse>> LoginAsync(LoginRequest request);
-        IResponse<bool> ValidateToken(string token);
+        Task<IResponse<bool>> ValidateToken(string token);
     }
 }

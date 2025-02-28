@@ -1,7 +1,13 @@
 ﻿using Application.Interfaces;
+using Application.LogModels;
+using Application.Utils;
 using Domain.Models;
-using Microsoft.AspNetCore.Mvc;
 using Domain.Validation;
+using MicroservicesLogger.Enums;
+using MicroservicesLogger.Interfaces;
+using MicroservicesLogger.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace AuthApi.Controllers
 {
@@ -13,13 +19,15 @@ namespace AuthApi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IApiLog<ApiLogModel> _logger;
 
         /// <summary>
         /// Anthenticantion controller constructor.
         /// </summary>
         /// <param name="authService">Injectionr of service IAuthService.</param>
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IApiLog<ApiLogModel> logger)
         {
+            _logger = logger;
             _authService = authService;
         }
 
@@ -33,20 +41,36 @@ namespace AuthApi.Controllers
         [ProducesResponseType(typeof(ResponseModel), 400)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
+            var baselog = await _logger.CreateBaseLogAsync();
+            var log = new SubLog();
+
             try
             {
+                baselog.Request = Encryptor.ObfuscateSensitiveData(JsonConvert.SerializeObject(request));
+
                 Validations.Validate(request);
 
                 var response = await _authService.LoginAsync(request);
+
+                baselog.Level = LogTypes.INFO;
+                baselog.Response = Encryptor.ObfuscateSensitiveData(JsonConvert.SerializeObject(response.Data));
+
                 return Ok(response.Data);
             }
             catch (ValidationException vex)
             {
+                baselog.Level = LogTypes.WARN;
                 return BadRequest(vex.Data);
             }
             catch (Exception ex)
             {
+                baselog.Level = LogTypes.ERROR;
                 return BadRequest(new ResponseModel { Message = ex.Message, Code = "LA654" });
+            }
+            finally
+            {
+                await baselog.AddStepAsync("LOGIN_REQUEST", log);
+                await _logger.WriteLogAsync(baselog);
             }
         }
 
@@ -56,12 +80,22 @@ namespace AuthApi.Controllers
         /// <param name="token">A string of token.</param>
         /// <returns></returns>
         [HttpGet("validate")]
-        public IActionResult ValidateToken([FromQuery] string token)
+        public async Task<IActionResult> ValidateToken([FromQuery] string token)
         {
+            var baselog = await _logger.CreateBaseLogAsync();
+            var log = new SubLog();
+
+            baselog.Request = string.Format("Token is {0}", string.IsNullOrWhiteSpace(token) ? "valid a string" : "invalid a string");
+
             if (string.IsNullOrEmpty(token))
                 return BadRequest(new ResponseModel { Message = "Token paramenter can't be null or empty", Code = "LA614" });
 
-            var response = _authService.ValidateToken(token);
+            var response = await _authService.ValidateToken(token);
+            
+            baselog.Response = response.Data;
+
+            await baselog.AddStepAsync("LOGIN_REQUEST", log);
+            await _logger.WriteLogAsync(baselog);
 
             if (response is null || !response.IsSuccess)
                 return Ok(new { isValid = false });

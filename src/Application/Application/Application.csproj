@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Domain\Domain.csproj" />
     <ProjectReference Include="..\..\Repository\Repository\Repository.csproj" />
+    <ProjectReference Include="..\LogManager\MicroservicesLogger.csproj" />
   </ItemGroup>
 
 </Project>

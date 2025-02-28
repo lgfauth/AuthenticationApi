@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Application.Utils
 {
@@ -49,6 +50,19 @@ namespace Application.Utils
                 Token = tokenHandler.WriteToken(token),
                 ExpiresAt = tokenDescriptor.Expires ?? DateTime.UtcNow
             };
+        }
+
+        public static string ObfuscateSensitiveData(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            string output = Regex.Replace(input, "(\"Password\"\\s*:\\s*\").+?(\")", "$1******$2", RegexOptions.IgnoreCase);
+            output = Regex.Replace(output, "(\"Email\"\\s*:\\s*\").+?(\")", "$1******$2", RegexOptions.IgnoreCase);
+            output = Regex.Replace(output, "(\"Token\"\\s*:\\s*\").+?(\")", "$1******$2", RegexOptions.IgnoreCase);
+            output = Regex.Replace(output, "(\"LastName\"\\s*:\\s*\").+?(\")", "$1******$2", RegexOptions.IgnoreCase);
+
+            return output;
         }
     }
 }
