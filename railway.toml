@@ -1,4 +1,2 @@
 [build]
-type = "docker"
-dockerfile = "src/Presentation/AuthApi/Dockerfile"
 context = "src/Presentation/AuthApi"
