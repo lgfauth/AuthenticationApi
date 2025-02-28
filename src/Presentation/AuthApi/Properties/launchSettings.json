@@ -15,18 +15,22 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://0.0.0.0:8080"
       }
     },
-    "Container (Dockerfile)": {
+    "Container (Docker)": {
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:443;http://+:80"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://0.0.0.0:8081;http://0.0.0.0:8080"
       },
-      "publishAllPorts": true,
-      "useSSL": true
+      "servicePort": 8081,
+      "sslPort": 8080,
+      "publishAllPorts": false,
+      "useSSL": false
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",
