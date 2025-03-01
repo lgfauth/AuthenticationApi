@@ -31,6 +31,8 @@ namespace Application.Services
             var baselog = await _logger.GetBaseLogAsync();
             var log = new SubLog();
 
+            baselog.Endpoint = _envorolmentVariables.MONGODBDATA_USER;
+
             try
             {
                 log.StartCronometer();
