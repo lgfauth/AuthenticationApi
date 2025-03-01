@@ -23,8 +23,6 @@ namespace MicroservicesLogger.Models
         {
             ExecutedAt = DateTime.Now;
             StopwatchCronometer = new Stopwatch();
-
-            StartCronometer();
         }
 
         public void StartCronometer() => StopwatchCronometer.Start();

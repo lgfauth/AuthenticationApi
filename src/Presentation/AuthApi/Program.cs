@@ -1,4 +1,5 @@
 using Application.Injections;
+using Application.Utils;
 using Domain.Settings;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -71,6 +72,8 @@ namespace AuthApi
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
+
+            HeathChecker.CheckMongoDbConnection(variables);
 
             app.Run();
         }
