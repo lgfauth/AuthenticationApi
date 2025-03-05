@@ -13,7 +13,7 @@ namespace Repository.Repositories
             string connectionString = string.Format(
                 envirolmentVariables.MONGODBSETTINGS_CONNECTIONSTRING,
                 envirolmentVariables.MONGODBDATA_USER,
-                envirolmentVariables.MONGODBDATA_PASSWORD,
+                Uri.EscapeDataString(envirolmentVariables.MONGODBDATA_PASSWORD),
                 envirolmentVariables.MONGODBDATA_CLUSTER);
 
             var client = new MongoClient(connectionString);
