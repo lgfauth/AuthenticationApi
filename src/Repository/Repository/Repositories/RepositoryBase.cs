@@ -7,6 +7,7 @@ namespace Repository.Repositories
     public class RepositoryBase
     {
         internal readonly IMongoCollection<User> _users;
+        private readonly string _collectionName = "Users";
 
         public RepositoryBase(EnvirolmentVariables envirolmentVariables)
         {
@@ -18,12 +19,8 @@ namespace Repository.Repositories
 
             var client = new MongoClient(connectionString);
 
-            Console.WriteLine("-----------------------------------------");
-            Console.WriteLine(connectionString);
-            Console.WriteLine("-----------------------------------------");
-
             var database = client.GetDatabase(envirolmentVariables.MONGODBSETTINGS_DATABASENAME);
-            _users = database.GetCollection<User>("Users");
+            _users = database.GetCollection<User>(_collectionName);
         }
     }
 }

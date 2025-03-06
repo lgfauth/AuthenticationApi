@@ -15,8 +15,8 @@ namespace Application.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IAuthRepository _authRepository;
         private readonly IApiLog<ApiLogModel> _logger;
+        private readonly IAuthRepository _authRepository;
         private readonly EnvirolmentVariables _envorolmentVariables;
 
         public AuthService(IAuthRepository authRepository, EnvirolmentVariables envorolmentVariables, IApiLog<ApiLogModel> logger)
