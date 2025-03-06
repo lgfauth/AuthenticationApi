@@ -31,8 +31,6 @@ namespace Application.Services
             var baselog = await _logger.GetBaseLogAsync();
             var log = new SubLog();
 
-            baselog.Endpoint = _envorolmentVariables.MONGODBDATA_USER;
-
             try
             {
                 log.StartCronometer();
@@ -44,7 +42,9 @@ namespace Application.Services
                 if (user is null || !encryptedPassword.Equals(user.PasswordHash))
                 {
                     log.StopCronometer();
-                    throw new Exception("Invalid username or password.");
+                    var responseUser = new ResponseModel { Message = "Invalid username or password.", Code = "VL0975" };
+
+                    return new ResponseError<AuthResponse>(responseUser);
                 }
 
                 var response = Encryptor.GenerateToken(user, _envorolmentVariables);

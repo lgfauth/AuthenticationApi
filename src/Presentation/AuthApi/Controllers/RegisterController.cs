@@ -48,6 +48,7 @@ namespace AuthApi.Controllers
             try
             {
                 baselog.Request = Encryptor.ObfuscateSensitiveData(JsonConvert.SerializeObject(request));
+                baselog.Endpoint = "POST: Register";
 
                 var validation = Validations.Validate(request);
                 if(!validation.IsSuccess)
@@ -114,6 +115,7 @@ namespace AuthApi.Controllers
             try
             {
                 baselog.Request = Encryptor.ObfuscateSensitiveData(JsonConvert.SerializeObject(request));
+                baselog.Endpoint = "POST: Unregister";
 
                 var validation = Validations.Validate(request);
                 if (!validation.IsSuccess)

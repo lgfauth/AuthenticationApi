@@ -47,6 +47,7 @@ namespace AuthApi.Controllers
             try
             {
                 baselog.Request = Encryptor.ObfuscateSensitiveData(JsonConvert.SerializeObject(request));
+                baselog.Endpoint = "POST: Login";
 
                 var validation = Validations.Validate(request);
                 if (!validation.IsSuccess)
@@ -58,6 +59,13 @@ namespace AuthApi.Controllers
                 }
 
                 var response = await _authService.LoginAsync(request);
+                if (!response.IsSuccess)
+                {
+                    baselog.Level = LogTypes.WARN;
+                    baselog.Response = new { response = response!.Error };
+
+                    return BadRequest(response!.Error);
+                }
 
                 baselog.Level = LogTypes.INFO;
                 baselog.Response = Encryptor.ObfuscateSensitiveData(JsonConvert.SerializeObject(response.Data));
@@ -88,6 +96,7 @@ namespace AuthApi.Controllers
             var log = new SubLog();
 
             baselog.Request = string.Format("Token is {0}", string.IsNullOrWhiteSpace(token) ? "valid a string" : "invalid a string");
+            baselog.Endpoint = "GET: ValidateToken";
 
             if (string.IsNullOrEmpty(token))
                 return BadRequest(new ResponseModel { Message = "Token paramenter can't be null or empty", Code = "LA614" });

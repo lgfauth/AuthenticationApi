@@ -106,8 +106,8 @@ namespace AuthApiTests.Application
                 .ReturnsAsync((User)null!);
 
             // Act & Assert
-            var exception = await Assert.ThrowsAsync<Exception>(() => _authService.LoginAsync(loginRequest));
-            Assert.Equal("Invalid username or password.", exception.Message);
+            var response = await _authService.LoginAsync(loginRequest);
+            Assert.Equal("Invalid username or password.", response.Error.Message);
         }
 
         [Fact]
