@@ -7,6 +7,7 @@ using Domain.Validation;
 using MicroservicesLogger.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace AuthApiTests.Api
@@ -76,10 +77,12 @@ namespace AuthApiTests.Api
 
             // Act
             var result = await _controller.Login(loginRequest);
-
+            
             // Assert
             var badResult = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal(validationEx.Data, badResult.Value);
+            var serialized = JsonConvert.SerializeObject(badResult.Value);
+
+            Assert.Equal(JsonConvert.SerializeObject(validationEx.Error), serialized);
         }
 
         [Fact]
@@ -100,7 +103,6 @@ namespace AuthApiTests.Api
 
             // Assert
             var badResult = Assert.IsType<BadRequestObjectResult>(result);
-            // Como o controller retorna um ResponseModel em caso de exceção genérica:
             var response = Assert.IsType<ResponseModel>(badResult.Value);
             Assert.Equal("LA654", response.Code);
             Assert.Equal(exMessage, response.Message);

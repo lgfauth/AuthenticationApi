@@ -48,7 +48,14 @@ namespace AuthApi.Controllers
             {
                 baselog.Request = Encryptor.ObfuscateSensitiveData(JsonConvert.SerializeObject(request));
 
-                Validations.Validate(request);
+                var validation = Validations.Validate(request);
+                if (!validation.IsSuccess)
+                {
+                    baselog.Level = LogTypes.WARN;
+                    baselog.Response = new { response = validation!.Error };
+
+                    return BadRequest(validation!.Error);
+                }
 
                 var response = await _authService.LoginAsync(request);
 
@@ -56,11 +63,6 @@ namespace AuthApi.Controllers
                 baselog.Response = Encryptor.ObfuscateSensitiveData(JsonConvert.SerializeObject(response.Data));
 
                 return Ok(response.Data);
-            }
-            catch (ValidationException vex)
-            {
-                baselog.Level = LogTypes.WARN;
-                return BadRequest(vex.Data);
             }
             catch (Exception ex)
             {

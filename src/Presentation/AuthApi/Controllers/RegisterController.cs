@@ -49,7 +49,14 @@ namespace AuthApi.Controllers
             {
                 baselog.Request = Encryptor.ObfuscateSensitiveData(JsonConvert.SerializeObject(request));
 
-                Validations.Validate(request);
+                var validation = Validations.Validate(request);
+                if(!validation.IsSuccess)
+                {
+                    baselog.Level = LogTypes.WARN;
+                    baselog.Response = new { response = validation!.Error };
+
+                    return BadRequest(validation!.Error);
+                }
 
                 var response = await _registerService.RegisterAsync(request);
                 if (!response.IsSuccess)
@@ -76,14 +83,11 @@ namespace AuthApi.Controllers
 
                 return StatusCode(201, responseModel);
             }
-            catch (ValidationException vex)
-            {
-                baselog.Level = LogTypes.WARN;
-                return BadRequest(vex.Error);
-            }
             catch (Exception ex)
             {
                 baselog.Level = LogTypes.ERROR;
+                log.Exception = ex;
+
                 return BadRequest(new ResponseModel { Message = ex.Message, Code = "EX058" });
             }
             finally
@@ -111,7 +115,14 @@ namespace AuthApi.Controllers
             {
                 baselog.Request = Encryptor.ObfuscateSensitiveData(JsonConvert.SerializeObject(request));
 
-                Validations.Validate(request);
+                var validation = Validations.Validate(request);
+                if (!validation.IsSuccess)
+                {
+                    baselog.Level = LogTypes.WARN;
+                    baselog.Response = new { response = validation!.Error };
+
+                    return BadRequest(validation!.Error);
+                }
 
                 var response = await _registerService.UnregisterAsync(request);
                 if (!response.IsSuccess)
@@ -137,14 +148,11 @@ namespace AuthApi.Controllers
 
                 return Ok(responseModel);
             }
-            catch (ValidationException vex)
-            {
-                baselog.Level = LogTypes.WARN;
-                return BadRequest(vex.Error);
-            }
             catch (Exception ex)
             {
                 baselog.Level = LogTypes.ERROR;
+                log.Exception = ex;
+
                 return BadRequest(new ResponseModel { Message = ex.Message, Code = "EX059" });
             }
             finally
