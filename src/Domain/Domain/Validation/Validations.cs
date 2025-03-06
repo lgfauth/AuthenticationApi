@@ -15,7 +15,6 @@ namespace Domain.Validation
         /// Validation for SubscriptionRequest form.
         /// </summary>
         /// <param name="request"></param>
-        /// <exception cref="ValidationException"></exception>
         public static IResponse<ResponseModel> Validate(SubscriptionRequest request)
         {
             if (request == null)
@@ -45,7 +44,6 @@ namespace Domain.Validation
         /// Validation for UnsubscribeRequest form.
         /// </summary>
         /// <param name="request"></param>
-        /// <exception cref="ValidationException"></exception>
         public static IResponse<ResponseModel> Validate(UnsubscribeRequest request)
         {
             if (request == null)
@@ -69,7 +67,6 @@ namespace Domain.Validation
         /// Validation for LoginRequest form.
         /// </summary>
         /// <param name="request"></param>
-        /// <exception cref="ValidationException"></exception>
         public static IResponse<ResponseModel> Validate(LoginRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Username))

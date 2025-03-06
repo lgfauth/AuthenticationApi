@@ -66,14 +66,11 @@ namespace AuthApiTests.Api
                 Password = ""
             };
 
-            var validationEx = new ValidationException(new ResponseModel
+            var validation = new ResponseModel
             {
                 Message = "Password field need be filed.",
                 Code = "VL001"
-            });
-
-            _authServiceMock.Setup(s => s.LoginAsync(It.IsAny<LoginRequest>()))
-                            .ThrowsAsync(validationEx);
+            };
 
             // Act
             var result = await _controller.Login(loginRequest);
@@ -82,7 +79,7 @@ namespace AuthApiTests.Api
             var badResult = Assert.IsType<BadRequestObjectResult>(result);
             var serialized = JsonConvert.SerializeObject(badResult.Value);
 
-            Assert.Equal(JsonConvert.SerializeObject(validationEx.Error), serialized);
+            Assert.Equal(JsonConvert.SerializeObject(validation), serialized);
         }
 
         [Fact]

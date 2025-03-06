@@ -71,11 +71,7 @@ namespace AuthApiTests.Api
                 LastName = "User"
             };
 
-            var validationError = new ResponseModel { Code = "VL006", Message = "Email field is not in a valid format." };
-            var validationEx = new ValidationException(validationError);
-
-            _registerServiceMock.Setup(s => s.RegisterAsync(It.IsAny<SubscriptionRequest>()))
-                                .ThrowsAsync(validationEx);
+            var validation = new ResponseModel { Code = "VL006", Message = "Email field is not in a valid format." };
 
             // Act
             var result = await _controller.Register(request);
@@ -84,8 +80,8 @@ namespace AuthApiTests.Api
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
             var response = Assert.IsType<ResponseModel>(badRequestResult.Value);
 
-            Assert.Equal("VL006", response.Code);
-            Assert.Equal("Email field is not in a valid format.", response.Message);
+            Assert.Equal(validation.Code, response.Code);
+            Assert.Equal(validation.Message, response.Message);
         }
 
         [Fact]
@@ -160,16 +156,11 @@ namespace AuthApiTests.Api
                 Email = "invalid@domain"
             };
 
-            var validationError = new ResponseModel
+            var validation = new ResponseModel
             {
                 Message = "Email field is not in a valid format.",
                 Code = "VL006"
             };
-
-            var validationEx = new ValidationException(validationError);
-
-            _registerServiceMock.Setup(s => s.UnregisterAsync(It.IsAny<UnsubscribeRequest>()))
-                                .ThrowsAsync(validationEx);
 
             // Act
             var result = await _controller.Unregister(request);
@@ -177,8 +168,8 @@ namespace AuthApiTests.Api
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
             var response = Assert.IsType<ResponseModel>(badRequestResult.Value);
-            Assert.Equal("VL006", response.Code);
-            Assert.Equal("Email field is not in a valid format.", response.Message);
+            Assert.Equal(validation.Code, response.Code);
+            Assert.Equal(validation.Message, response.Message);
         }
 
         [Fact]
