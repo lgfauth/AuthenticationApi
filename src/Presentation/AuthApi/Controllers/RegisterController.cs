@@ -52,6 +52,13 @@ namespace AuthApi.Controllers
                 Validations.Validate(request);
 
                 var response = await _registerService.RegisterAsync(request);
+                if (!response.IsSuccess)
+                {
+                    baselog.Level = LogTypes.WARN;
+                    baselog.Response = new { response = response!.Error };
+
+                    return BadRequest(response!.Error);
+                }
 
                 var responseModel = new ResponseModel
                 {
@@ -72,7 +79,7 @@ namespace AuthApi.Controllers
             catch (ValidationException vex)
             {
                 baselog.Level = LogTypes.WARN;
-                return BadRequest(vex.Data);
+                return BadRequest(vex.Error);
             }
             catch (Exception ex)
             {

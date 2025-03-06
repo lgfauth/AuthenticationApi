@@ -1,8 +1,10 @@
-﻿using Application.Services;
+﻿using Application.LogModels;
+using Application.Services;
 using Application.Utils;
 using Domain.Entities;
 using Domain.Models;
 using Domain.Settings;
+using MicroservicesLogger.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
@@ -16,12 +18,15 @@ namespace AuthApiTests.Application
     public class AuthServiceTests
     {
         private readonly Mock<IAuthRepository> _authRepositoryMock;
+        private readonly Mock<IApiLog<ApiLogModel>> _loggerMock;
         private readonly EnvirolmentVariables _variables;
         private readonly AuthService _authService;
 
         public AuthServiceTests()
         {
+            _loggerMock = new Mock<IApiLog<ApiLogModel>>();
             _authRepositoryMock = new Mock<IAuthRepository>();
+
             _variables = new EnvirolmentVariables
             {
                 JWTSETTINGS_SECRETKEY = "abcdefghijklmnopqrstuvwxyz012345",
@@ -29,8 +34,12 @@ namespace AuthApiTests.Application
                 JWTSETTINGS_AUDIENCE = "TestAudience",
                 JWTSETTINGS_EXPIRATIONMINUTES = 60
             };
+            
             var options = Options.Create(_variables);
-            _authService = new AuthService(_authRepositoryMock.Object, options.Value);
+            _authService = new AuthService(_authRepositoryMock.Object, options.Value, _loggerMock.Object);
+
+            _loggerMock.Setup(x => x.CreateBaseLogAsync()).ReturnsAsync(new ApiLogModel());
+            _loggerMock.Setup(x => x.GetBaseLogAsync()).ReturnsAsync(new ApiLogModel());
         }
 
         [Fact]
@@ -102,7 +111,7 @@ namespace AuthApiTests.Application
         }
 
         [Fact]
-        public void ValidateToken_ReturnsTrue_WhenTokenIsValid()
+        public async Task ValidateToken_ReturnsTrue_WhenTokenIsValid()
         {
             // Arrange
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -122,7 +131,7 @@ namespace AuthApiTests.Application
             string jwtToken = tokenHandler.WriteToken(token);
 
             // Act
-            var response = _authService.ValidateToken(jwtToken);
+            var response = await _authService.ValidateToken(jwtToken);
 
             // Assert
             Assert.True(response.IsSuccess);
@@ -130,13 +139,13 @@ namespace AuthApiTests.Application
         }
 
         [Fact]
-        public void ValidateToken_ReturnsFalse_WhenTokenIsInvalid()
+        public async Task ValidateToken_ReturnsFalse_WhenTokenIsInvalid()
         {
             // Arrange
             string invalidToken = "thisIsNotAValidToken";
 
             // Act
-            var response = _authService.ValidateToken(invalidToken);
+            var response = await _authService.ValidateToken(invalidToken);
 
             // Assert
             Assert.True(response.IsSuccess);

@@ -6,16 +6,9 @@ using System.Reflection;
 
 namespace AuthApi
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class Program
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,20 +20,7 @@ namespace AuthApi
             DependenceInjections.Injections(builder.Services, variables.MONGODBSETTINGS_CONNECTIONSTRING);
 
             var isDevelopment = builder.Environment.IsDevelopment();
-
-            if (isDevelopment)
-            {
-                builder.Services.AddCors(options =>
-                {
-                    options.AddPolicy("DevelopmentCorsPolicy", policy =>
-                    {
-                        policy.AllowAnyOrigin()   // Permite qualquer origem
-                              .AllowAnyMethod()   // Permite qualquer método (GET, POST, etc.)
-                              .AllowAnyHeader();  // Permite qualquer cabeçalho
-                    });
-                });
-            }
-            else
+            if (!isDevelopment)
             {
                 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
                 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
@@ -58,14 +38,10 @@ namespace AuthApi
                 options.IncludeXmlComments(domainXmlPath);
                 options.IncludeXmlComments(presentationXmlPath);
 
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Ruler RPG API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication API", Version = "v1" });
             });
 
             var app = builder.Build();
-
-#if DEBUG
-            app.UseCors("DevelopmentCorsPolicy");
-#endif
 
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -73,7 +49,7 @@ namespace AuthApi
             app.UseAuthorization();
             app.MapControllers();
 
-            HeathChecker.CheckMongoDbConnection(variables);
+            await HeathChecker.CheckMongoDbConnection(variables);
 
             app.Run();
         }

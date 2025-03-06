@@ -1,8 +1,10 @@
 ﻿using Application.Interfaces;
+using Application.LogModels;
 using AuthApi.Controllers;
 using Domain.Models;
 using Domain.Models.Envelope;
 using Domain.Validation;
+using MicroservicesLogger.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -12,12 +14,16 @@ namespace AuthApiTests.Api
     public class RegisterControllerTests
     {
         private readonly Mock<IRegisterService> _registerServiceMock;
+        private readonly Mock<IApiLog<ApiLogModel>> _loggerMock;
         private readonly RegisterController _controller;
 
         public RegisterControllerTests()
         {
+            _loggerMock = new Mock<IApiLog<ApiLogModel>>();
             _registerServiceMock = new Mock<IRegisterService>();
-            _controller = new RegisterController(_registerServiceMock.Object);
+            _controller = new RegisterController(_registerServiceMock.Object, _loggerMock.Object);
+
+            _loggerMock.Setup(x => x.CreateBaseLogAsync()).ReturnsAsync(new ApiLogModel());
         }
 
         #region Tests for Register (Subscribe)

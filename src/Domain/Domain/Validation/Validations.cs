@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace Domain.Validation
 {
+    /// <summary>
+    /// Form validations class.
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public class Validations
     {

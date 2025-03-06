@@ -35,12 +35,12 @@ namespace Application.Services
 
             if (existingUser is not null)
             {
-                var exception = new Exception("User already exists.");
+                var response = new ResponseModel { Message = "User already exists.", Code = "AL022" };
 
                 logCheck.StopCronometer();
-                logCheck.Exception = exception;
+                logCheck.Exception = new Exception(response.Message);
 
-                throw exception;
+                return new ResponseError<bool>(response);
             }
 
             logCheck.StopCronometer();
@@ -70,12 +70,12 @@ namespace Application.Services
 
             if (existingUser is null)
             {
-                var exception = new Exception("User not exists.");
+                var response = new ResponseModel { Message = "User not exists.", Code = "AL021" };
 
                 logCheck.StopCronometer();
-                logCheck.Exception = exception;
+                logCheck.Exception = new Exception(response.Message);
 
-                throw exception;
+                return new ResponseError<bool>(response);
             }
 
             logCheck.StopCronometer();

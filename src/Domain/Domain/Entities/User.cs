@@ -3,6 +3,9 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Domain.Entities
 {
+    /// <summary>
+    /// MongoDB User entity
+    /// </summary>
     public class User
     {
         [BsonId]

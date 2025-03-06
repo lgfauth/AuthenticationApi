@@ -1,7 +1,9 @@
 ﻿using Application.Interfaces;
+using Application.LogModels;
 using Application.Services;
 using Domain.Entities;
 using Domain.Models;
+using MicroservicesLogger.Interfaces;
 using Moq;
 using Repository.Interfaces;
 using Xunit;
@@ -12,13 +14,19 @@ namespace AuthApiTests.Application
     {
         private readonly Mock<IRegisterRepository> _registerRepositoryMock;
         private readonly Mock<IRabbitMqPublisher> _publisherMock;
+        private readonly Mock<IApiLog<ApiLogModel>> _loggerMock;
         private readonly RegisterService _registerService;
 
         public RegisterServiceTests()
         {
             _registerRepositoryMock = new Mock<IRegisterRepository>();
             _publisherMock = new Mock<IRabbitMqPublisher>();
-            _registerService = new RegisterService(_registerRepositoryMock.Object, _publisherMock.Object);
+            _loggerMock = new Mock<IApiLog<ApiLogModel>>();
+
+            _registerService = new RegisterService(_registerRepositoryMock.Object, _publisherMock.Object, _loggerMock.Object);
+
+            _loggerMock.Setup(x => x.CreateBaseLogAsync()).ReturnsAsync(new ApiLogModel());
+            _loggerMock.Setup(x => x.GetBaseLogAsync()).ReturnsAsync(new ApiLogModel());
         }
 
         [Fact]
@@ -39,8 +47,10 @@ namespace AuthApiTests.Application
                 .ReturnsAsync(new User());
 
             // Act & Assert
-            var ex = await Assert.ThrowsAsync<Exception>(() => _registerService.RegisterAsync(subscriptionRequest));
-            Assert.Equal("User already exists.", ex.Message);
+            var response = await _registerService.RegisterAsync(subscriptionRequest);
+
+            Assert.False(response.IsSuccess);
+            Assert.Equal("User already exists.", response.Error.Message);
 
             _publisherMock.Verify(p => p.PublishUserRegistrationOnQueueAsync(It.IsAny<UserQueueRegister>()), Times.Never);
         }
@@ -97,8 +107,10 @@ namespace AuthApiTests.Application
                 .ReturnsAsync((User)null!);
 
             // Act & Assert
-            var ex = await Assert.ThrowsAsync<Exception>(() => _registerService.UnregisterAsync(unsubscribeRequest));
-            Assert.Equal("User not exists.", ex.Message);
+            var response = await _registerService.UnregisterAsync(unsubscribeRequest);
+
+            Assert.False(response.IsSuccess);
+            Assert.Equal("User not exists.", response.Error.Message);
 
             _publisherMock.Verify(p => p.PublishUserRegistrationOnQueueAsync(It.IsAny<UserQueueRegister>()), Times.Never);
         }

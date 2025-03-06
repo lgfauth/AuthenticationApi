@@ -1,8 +1,10 @@
 ﻿using Application.Interfaces;
+using Application.LogModels;
 using AuthApi.Controllers;
 using Domain.Models;
 using Domain.Models.Envelope;
 using Domain.Validation;
+using MicroservicesLogger.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -11,13 +13,17 @@ namespace AuthApiTests.Api
 {
     public class AuthControllerTests
     {
+        private readonly Mock<IApiLog<ApiLogModel>> _loggerMock;
         private readonly Mock<IAuthService> _authServiceMock;
         private readonly AuthController _controller;
 
         public AuthControllerTests()
         {
             _authServiceMock = new Mock<IAuthService>();
-            _controller = new AuthController(_authServiceMock.Object);
+            _loggerMock = new Mock<IApiLog<ApiLogModel>>();
+            _controller = new AuthController(_authServiceMock.Object, _loggerMock.Object);
+
+            _loggerMock.Setup(x => x.CreateBaseLogAsync()).ReturnsAsync(new ApiLogModel());
         }
 
         [Fact]
@@ -101,13 +107,13 @@ namespace AuthApiTests.Api
         }
 
         [Fact]
-        public void ValidateToken_ReturnsBadRequest_WhenTokenIsEmpty()
+        public async Task ValidateToken_ReturnsBadRequest_WhenTokenIsEmpty()
         {
             // Arrange
             string token = "";
 
             // Act
-            var result = _controller.ValidateToken(token);
+            var result = await _controller.ValidateToken(token);
 
             // Assert
             var badResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -118,17 +124,16 @@ namespace AuthApiTests.Api
         }
 
         [Fact]
-        public void ValidateToken_ReturnsOkWithFalse_WhenServiceResponseIsNullOrNotSuccess()
+        public async Task ValidateToken_ReturnsOkWithFalse_WhenServiceResponseIsNullOrNotSuccess()
         {
             // Arrange
             string token = "someToken";
-            var serviceResponse = new ResponseOk<bool>(false);
             var expect = new ResponseModel { Message = "Not valid", Code = "LA652" };
 
-            _authServiceMock.Setup(s => s.ValidateToken(token)).Returns(serviceResponse);
+            _authServiceMock.Setup(s => s.ValidateToken(token)).ReturnsAsync(new ResponseOk<bool>(false));
 
             // Act
-            var result = _controller.ValidateToken(token);
+            var result = await _controller.ValidateToken(token);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result).Value;
@@ -138,18 +143,17 @@ namespace AuthApiTests.Api
         }
 
         [Fact]
-        public void ValidateToken_ReturnsOkWithTrue_WhenServiceResponseIsSuccess()
+        public async Task ValidateToken_ReturnsOkWithTrue_WhenServiceResponseIsSuccess()
         {
             // Arrange
             string token = "someToken";
-            var serviceResponse = new ResponseOk<bool>(true);
             var expect = new ResponseModel { Message = "Valid", Code = "LA652" };
 
             _authServiceMock.Setup(s => s.ValidateToken(token))
-                            .Returns(serviceResponse);
+                            .ReturnsAsync(new ResponseOk<bool>(true));
 
             // Act
-            var result = _controller.ValidateToken(token);
+            var result = await _controller.ValidateToken(token);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result).Value;
