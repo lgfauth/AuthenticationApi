@@ -7,6 +7,8 @@ namespace Domain.Entities
     /// </summary>
     public class UserQueueRegister
     {
+        private const string TypeRegister = "REGISTER";
+        private const string TypeDelete = "DELETE";
         /// <summary>
         /// Constructor for registration request.
         /// </summary>
@@ -19,7 +21,7 @@ namespace Domain.Entities
             LastName = request.LastName;
             Name = request.Name;
 
-            Type = "REGISTER";
+            Type = TypeRegister;
         }
 
         /// <summary>
@@ -32,7 +34,7 @@ namespace Domain.Entities
             Password = request.Password;
             Email = request.Email;
 
-            Type = "DELETE";
+            Type = TypeDelete;
         }
 
         /// <summary>
