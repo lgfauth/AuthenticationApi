@@ -18,6 +18,7 @@ namespace Domain.Settings
         public string RABBITMQCONFIGURATION_USERNAME { get; set; } = string.Empty;
         public string RABBITMQCONFIGURATION_PASSWORD { get; set; } = string.Empty;
         public string RABBITMQCONFIGURATION_QUEUENAME { get; set; } = string.Empty;
+        public string RABBITMQCONFIGURATION_RETRY_QUEUENAME { get; set; } = string.Empty;
         public string RABBITMQCONFIGURATION_VIRTUALHOST { get; set; } = string.Empty;
     }
 }
