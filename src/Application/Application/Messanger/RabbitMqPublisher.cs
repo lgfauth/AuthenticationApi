@@ -32,7 +32,13 @@ namespace Application.Messanger
             using var connection = await _factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();
 
-            _ = await channel.QueueDeclareAsync(
+            try
+            {
+                await channel.QueueDeclarePassiveAsync(_variables.RABBITMQCONFIGURATION_QUEUENAME);
+            }
+            catch
+            {
+                _ = await channel.QueueDeclareAsync(
                     queue: _variables.RABBITMQCONFIGURATION_QUEUENAME,
                     durable: true,
                     exclusive: false,
@@ -43,6 +49,7 @@ namespace Application.Messanger
                         { "x-dead-letter-routing-key", _variables.RABBITMQCONFIGURATION_RETRY_QUEUENAME }
                     }!
                 );
+            }
 
             var json = JsonSerializer.Serialize(message);
             ReadOnlyMemory<byte> body = Encoding.UTF8.GetBytes(json);
