@@ -58,44 +58,5 @@ namespace Application.Services
                 await baselog.AddStepAsync("PROCESS_LOGIN_REQUEST", log);
             }
         }
-
-        public async Task<IResponse<bool>> ValidateToken(string token)
-        {
-            var baselog = await _logger.GetBaseLogAsync();
-            var log = new SubLog();
-
-            try
-            {
-                log.StartCronometer();
-                
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.UTF8.GetBytes(_envorolmentVariables.JWTSETTINGS_SECRETKEY);
-
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidIssuer = _envorolmentVariables.JWTSETTINGS_ISSUER,
-                    ValidateAudience = true,
-                    ValidAudience = _envorolmentVariables.JWTSETTINGS_AUDIENCE,
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
-
-                log.StopCronometer();
-
-                return new ResponseOk<bool>(true);
-            }
-            catch
-            {
-                log.StopCronometer();
-
-                return new ResponseOk<bool>(false);
-            }
-            finally
-            {
-                await baselog.AddStepAsync("PROCESS_TOKEN_VALIDATION", log);
-            }
-        }
     }
 }
