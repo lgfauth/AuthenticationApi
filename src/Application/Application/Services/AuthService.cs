@@ -6,10 +6,7 @@ using Domain.Models.Envelope;
 using Domain.Settings;
 using MicroservicesLogger.Interfaces;
 using MicroservicesLogger.Models;
-using Microsoft.IdentityModel.Tokens;
 using Repository.Interfaces;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 
 namespace Application.Services
 {

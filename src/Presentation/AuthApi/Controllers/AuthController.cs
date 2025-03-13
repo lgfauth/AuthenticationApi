@@ -83,35 +83,5 @@ namespace AuthApi.Controllers
                 await _logger.WriteLogAsync(baselog);
             }
         }
-
-        /// <summary>
-        /// Verify if token already valid for use.
-        /// </summary>
-        /// <param name="token">A string of token.</param>
-        /// <returns></returns>
-        [HttpGet("validate")]
-        public async Task<IActionResult> ValidateToken([FromQuery] string token)
-        {
-            var baselog = await _logger.CreateBaseLogAsync();
-            var log = new SubLog();
-
-            baselog.Request = string.Format("Token is {0}", string.IsNullOrWhiteSpace(token) ? "valid a string" : "invalid a string");
-            baselog.Endpoint = "GET: ValidateToken";
-
-            if (string.IsNullOrEmpty(token))
-                return BadRequest(new ResponseModel { Message = "Token paramenter can't be null or empty", Code = "LA614" });
-
-            var response = await _authService.ValidateToken(token);
-            
-            baselog.Response = response.Data;
-
-            await baselog.AddStepAsync("LOGIN_REQUEST", log);
-            await _logger.WriteLogAsync(baselog);
-
-            if (response is null || !response.IsSuccess)
-                return Ok(new { isValid = false });
-
-            return Ok(new ResponseModel { Message = response.Data ? "Valid" : "Not valid", Code = "LA652" });
-        }
     }
 }
