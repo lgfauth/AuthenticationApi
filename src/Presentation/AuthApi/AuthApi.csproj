@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>56a4efb9-d81e-44c5-ae94-561dc8f3755b</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>E:\_Projetos\AuthenticationApi\src\Presentation\AuthApi\bin\Debug\net6.0\AuthApi.xml</DocumentationFile>
+    <DocumentationFile>E:\_Projetos\AuthenticationApi\src\Presentation\AuthApi\bin\Debug\net8.0\AuthApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
